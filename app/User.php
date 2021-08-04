@@ -13,6 +13,8 @@ class User extends Authenticatable
 
     //select table
     protected $table = 'usuario';
+    //
+    public $timestamps = false;
     //select primar kye
     protected $primaryKey = 'id_usuario';
 
