@@ -17,3 +17,18 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+//login
+Route::post('login', 'userController@logIn');
+//form register data
+Route::get('datos-registro', 'userController@getFormRegisterData');
+//register
+Route::post('registrar-usuario', 'userController@register');
+//password reset
+Route::post('recuperar-contraseña', 'userController@resetPassword');
+
+Route::group(['middleware' => 'auth:api'], function () {
+
+    Route::post('cerrar-sesion', 'userController@logOut');
+});
