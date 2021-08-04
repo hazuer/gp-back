@@ -8,9 +8,12 @@ class userData extends Model
 {
     //select table
     protected $table = 'datos_usuario';
-    //select primar kye
-    protected $primaryKey = 'id_dato_usuario';
+    //select primar key
 
+    //
+    public $timestamps = false;
+    //
+    protected $primaryKey = 'id_dato_usuario';
     /**
      * The attributes that are mass assignable.
      *
