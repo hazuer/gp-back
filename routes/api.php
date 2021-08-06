@@ -28,7 +28,11 @@ Route::post('registrar-usuario', 'userController@register');
 //password reset
 Route::post('recuperar-contraseña', 'userController@resetPassword');
 
-Route::group(['middleware' => 'auth:api'], function () {
+Route::get('listar-usuarios', 'userActionsController@userList');
 
+Route::group(['middleware' => 'auth:api'], function () {
+    //close session
     Route::post('cerrar-sesion', 'userController@logOut');
+    //users list
+    Route::get('listar-usuarios', 'userActionsController@userList');
 });

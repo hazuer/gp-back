@@ -22,7 +22,7 @@
                     <tr>
                         <td style="text-align:center;">
                           <a href="" title="logo" target="_blank">
-                            <img width="60" src="{{asset('imagenesGP/logo_login.png')}}" title="logo" alt="logo">
+                            <img width="90px" height="100px" src="{{asset('imagenesGP/logo_login.png')}}" title="logo" alt="logo">
                           </a>
                         </td>
                     </tr>

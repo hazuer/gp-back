@@ -20,14 +20,9 @@ class userData extends Model
      * @var array
      */
     protected $fillable = [
-        'correo',
         'nombre',
         'apellido_paterno',
         'apellido_materno',
-        'id_pais',
-        'id_cat_planta',
-        'id_cat_cliente',
-        'id_cat_estatus',
         'fecha_creacion',
         'id_usuario_modifica',
         'fecha_modificacion',

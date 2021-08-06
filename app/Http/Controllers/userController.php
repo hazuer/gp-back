@@ -53,19 +53,28 @@ class userController extends Controller
     {
         try {
             $newUserData =  new userData;
-            $newUserData->correo = $req->correo;
             $newUserData->nombre = $req->nombre;
             $newUserData->apellido_paterno = $req->apellido_paterno;
             $newUserData->apellido_materno = $req->apellido_materno;
-            $newUserData->id_cat_planta = $req->id_cat_planta;
-            $newUserData->id_cat_cliente = $req->id_cat_cliente;
-            $newUserData->id_cat_estatus = 5; // status waiting
             $newUserData->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newUserData->save()) {
-                return response()->json([
-                    'result' => true,
-                    'message' => "Registro exitoso, esperar autorización"
-                ], 201);
+                $newUser = new User;
+                $newUser->id_dato_usuario = $newUserData->id_dato_usuario;
+                $newUser->correo = $req->correo;
+                $newUser->id_cat_planta = $req->id_cat_planta;
+                $newUser->id_cat_cliente = $req->id_cat_cliente;
+                $newUser->id_cat_estatus = 5; // status waiting
+                if ($newUser->save()) {
+                    return response()->json([
+                        'result' => true,
+                        'message' => "Registro exitoso, esperar autorización"
+                    ], 201);
+                } else {
+                    return response()->json([
+                        'result' => false,
+                        'message' => "error registro"
+                    ], 401);
+                }
             } else {
                 return response()->json([
                     'result' => false,
@@ -86,6 +95,7 @@ class userController extends Controller
     {
         try {
             //get user
+
             $user = User::where('correo', $req->correo)->first();
 
             //if user doesn't exist 
@@ -108,9 +118,50 @@ class userController extends Controller
                 //create token
                 $token = $user->createToken('Laravel')->accessToken;
                 //login success
+
+                $data = userData::leftJoin('usuario', 'usuario.id_dato_usuario', '=', 'datos_usuario.id_dato_usuario')
+                    ->leftJoin('cat_cliente', 'cat_cliente.id_cat_cliente', '=', 'usuario.id_cat_cliente')
+                    ->leftJoin('cat_planta', 'cat_planta.id_cat_planta', '=', 'usuario.id_cat_planta')
+                    ->leftJoin('cat_perfil', 'usuario.id_cat_perfil', '=', 'usuario.id_cat_perfil')
+                    ->select(
+                        'usuario.id_dato_usuario',
+                        'datos_usuario.nombre',
+                        'datos_usuario.apellido_paterno',
+                        'datos_usuario.apellido_materno',
+                        'cat_perfil.perfil',
+                        'cat_planta.nombre_planta',
+                        'cat_cliente.nombre_cliente',
+                        'usuario.id_cat_perfil',
+                        'usuario.id_cat_cliente',
+                        'usuario.id_cat_planta',
+                        'usuario.id_cat_estatus'
+                    )
+                    ->where('usuario.id_dato_usuario', $user->id_dato_usuario)
+                    ->first();
+
                 return response()->json([
                     'result' => true,
-                    'token' => $token,
+                    'data' => [
+                        'token' => $token,
+                        'user' => [
+                            'userId' => $data->id_dato_usuario,
+                            'name' => $data->nombre,
+                            'last_name' => $data->apellido_paterno,
+                            'secondary_last_name' => $data->apellido_materno
+                        ],
+                        'catPlant' => [
+                            'plantId' => $data->id_cat_planta,
+                            'plantName' => $data->nombre_planta,
+                        ],
+                        'catProfile' => [
+                            'profileId' => $data->id_cat_perfil,
+                            'nameProfile' => $data->perfil,
+                        ],
+                        'catCustomer' => [
+                            'customerId' => $data->id_cat_cliente,
+                            'customerName' => $data->nombre_cliente
+                        ]
+                    ],
                     'message' => "Login Success",
                 ], 200);
             } else {
