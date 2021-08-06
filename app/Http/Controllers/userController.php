@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\ComunFunctionsController;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class userController extends Controller
 {
@@ -51,37 +52,35 @@ class userController extends Controller
     /////////register function////////
     public function register(RegisterRequest $req)
     {
+
+        DB::beginTransaction();
+
         try {
             $newUserData =  new userData;
             $newUserData->nombre = $req->nombre;
             $newUserData->apellido_paterno = $req->apellido_paterno;
             $newUserData->apellido_materno = $req->apellido_materno;
             $newUserData->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
-            if ($newUserData->save()) {
-                $newUser = new User;
-                $newUser->id_dato_usuario = $newUserData->id_dato_usuario;
-                $newUser->correo = $req->correo;
-                $newUser->id_cat_planta = $req->id_cat_planta;
-                $newUser->id_cat_cliente = $req->id_cat_cliente;
-                $newUser->id_cat_estatus = 5; // status waiting
-                if ($newUser->save()) {
-                    return response()->json([
-                        'result' => true,
-                        'message' => "Registro exitoso, esperar autorización"
-                    ], 201);
-                } else {
-                    return response()->json([
-                        'result' => false,
-                        'message' => "error registro"
-                    ], 401);
-                }
-            } else {
-                return response()->json([
-                    'result' => false,
-                    'message' => "error registro"
-                ], 401);
-            }
+            $newUserData->save();
+
+            $newUser = new User;
+            $newUser->id_dato_usuario = $newUserData->id_dato_usuario;
+            $newUser->correo = $req->correo;
+            $newUser->id_cat_planta = $req->id_cat_planta;
+            $newUser->id_cat_cliente = $req->id_cat_cliente;
+            $newUser->id_cat_estatus = 5; // status waiting
+            $newUser->save();
+
+            DB::commit();
+
+            return response()->json([
+                'result' => true,
+                'message' => "Registro exitoso, esperar autorización"
+            ], 201);
         } catch (\Exception $exception) {
+
+            //
+            DB::rollback();
             //internal server error reponse 
             return response()->json([
                 'result' => false,
@@ -122,7 +121,7 @@ class userController extends Controller
                 $data = userData::leftJoin('usuario', 'usuario.id_dato_usuario', '=', 'datos_usuario.id_dato_usuario')
                     ->leftJoin('cat_cliente', 'cat_cliente.id_cat_cliente', '=', 'usuario.id_cat_cliente')
                     ->leftJoin('cat_planta', 'cat_planta.id_cat_planta', '=', 'usuario.id_cat_planta')
-                    ->leftJoin('cat_perfil', 'usuario.id_cat_perfil', '=', 'usuario.id_cat_perfil')
+                    ->leftJoin('cat_perfil', 'cat_perfil.id_cat_perfil', '=', 'usuario.id_cat_perfil')
                     ->select(
                         'usuario.id_dato_usuario',
                         'datos_usuario.nombre',

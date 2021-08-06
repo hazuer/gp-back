@@ -10,6 +10,8 @@ class catPlants extends Model
     protected $table = 'cat_planta';
     //select primar kye
     protected $primaryKey = 'id_cat_planta';
+    //
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.

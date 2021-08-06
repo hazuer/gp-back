@@ -33,6 +33,8 @@ Route::get('listar-usuarios', 'userActionsController@userList');
 Route::group(['middleware' => 'auth:api'], function () {
     //close session
     Route::post('cerrar-sesion', 'userController@logOut');
+    //users list data
+    Route::get('datos-listar-usuarios', 'userActionsController@dataUsersList')->middleware('accessList');
     //users list
-    Route::get('listar-usuarios', 'userActionsController@userList');
+    Route::get('listar-usuarios', 'userActionsController@userList')->middleware('accessList');
 });

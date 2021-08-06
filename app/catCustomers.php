@@ -11,7 +11,8 @@ class catCustomers extends Model
     protected $table = 'cat_cliente';
     //select primar kye
     protected $primaryKey = 'id_cat_cliente';
-
+    //
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *
