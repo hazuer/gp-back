@@ -37,8 +37,10 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('datos-listar-usuarios', 'userActionsController@dataUsersList')->middleware('accessAdminSupervisor');
     //users list
     Route::get('listar-usuarios', 'userActionsController@userList')->middleware('accessAdminSupervisor');
-    //data authorizer
-    Route::get('datos-autorizar-usuarios', 'userActionsController@dataAuthtorize')->middleware('accessAdminSupervisor');
+    //user data
+    Route::get('datos-usuario', 'userActionsController@userDataForm')->middleware('accessAdminSupervisor');
     //authorizer user
     Route::post('autorizar-usuarios', 'userActionsController@userAuthtorize')->middleware('accessAdminSupervisor');
+    //update user data
+    Route::post('editar-usuarios-datos', 'userActionsController@updateUserData')->middleware('accessAdminSupervisor');
 });

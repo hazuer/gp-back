@@ -12,6 +12,7 @@ use App\catStatus;
 use App\Mail\resetPassword;
 use App\Http\Controllers\ComunFunctionsController;
 use App\Http\Requests\AuthorizerRequest;
+use App\Http\Requests\UpdateUserRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -180,7 +181,7 @@ class userActionsController extends Controller
     }
 
     //function data form authorize
-    public function dataAuthtorize(Request $req)
+    public function userDataForm(Request $req)
     {
 
         try {
@@ -243,11 +244,11 @@ class userActionsController extends Controller
                     [
                         'correo' => $req->correo,
                         'password' => Hash::make($password),
-                        'id_usuario_crea' => auth()->user()->id_dato_usuario,
                         'id_cat_planta' => $req->id_cat_planta,
                         'id_cat_cliente' => $req->id_cat_cliente,
                         'id_cat_estatus' => $req->id_cat_estatus,
                         'id_cat_perfil' => $req->id_cat_perfil,
+                        'id_usuario_crea' => auth()->user()->id_dato_usuario,
                         'fecha_creacion' => Carbon::now()->format('Y-m-d H:i:s')
 
                     ]
@@ -275,6 +276,38 @@ class userActionsController extends Controller
             ], 201);
         } catch (\Exception $exception) {
             DB::rollback();
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //update user data function 
+    public function updateUserData(UpdateUserRequest $req)
+    {
+        try {
+
+            User::where('id_dato_usuario', $req->id_dato_usuario)
+                ->update(
+                    [
+                        'correo' => $req->correo,
+                        'id_cat_planta' => $req->id_cat_planta,
+                        'id_cat_cliente' => $req->id_cat_cliente,
+                        'id_cat_estatus' => $req->id_cat_estatus,
+                        'id_cat_perfil' => $req->id_cat_perfil,
+                        'id_usuario_modifica' => auth()->user()->id_dato_usuario,
+                        'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+
+            return response()->json([
+                'result' => true,
+                'message' => "Usuario actualizado con éxito"
+            ], 201);
+        } catch (\Exception $exception) {
+
             //internal server error reponse 
             return response()->json([
                 'result' => false,
