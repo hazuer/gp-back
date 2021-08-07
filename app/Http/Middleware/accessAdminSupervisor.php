@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class accessList
+class accessAdminSupervisor
 {
     /**
      * Handle an incoming request.

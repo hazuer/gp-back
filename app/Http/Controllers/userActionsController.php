@@ -3,16 +3,26 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\User;
 use App\userData;
 use App\catCustomers;
 use App\catPlants;
 use App\catProfiles;
 use App\catStatus;
+use App\Mail\resetPassword;
+use App\Http\Controllers\ComunFunctionsController;
+use App\Http\Requests\AuthorizerRequest;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class userActionsController extends Controller
 {
 
+
+    //function data form list users
     public function dataUsersList(Request $req)
     {
         try {
@@ -44,6 +54,7 @@ class userActionsController extends Controller
     }
 
 
+    //function user list
     public function userList(Request $req)
     {
 
@@ -160,6 +171,110 @@ class userActionsController extends Controller
                 'userList' => $usersList
             ], 200);
         } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //function data form authorize
+    public function dataAuthtorize(Request $req)
+    {
+
+        try {
+            //get id from url
+            $id_dato_usuario = $req->id_dato_usuario;
+
+            //get list 
+            $listCustomers = catCustomers::select('id_cat_cliente', 'nombre_cliente')->get();
+            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')->get();
+            $listProfiles = catProfiles::select('id_cat_perfil', 'perfil')->get();
+            $listStatus = catStatus::all();
+
+            //get user data
+            $user = userData::leftJoin('usuario', 'usuario.id_dato_usuario', '=', 'datos_usuario.id_dato_usuario')
+                ->select(
+                    'usuario.id_dato_usuario',
+                    'usuario.correo',
+                    'datos_usuario.nombre',
+                    'datos_usuario.apellido_paterno',
+                    'datos_usuario.apellido_materno',
+                    'usuario.id_cat_perfil',
+                    'usuario.id_cat_cliente',
+                    'usuario.id_cat_planta',
+                    'usuario.id_cat_estatus'
+                )
+                ->where('usuario.id_dato_usuario', $id_dato_usuario)
+                ->first();
+
+
+            return response()->json([
+                'result' => true,
+                'user' => $user,
+                'listCustomers' => $listCustomers,
+                'listPlants' => $listPlants,
+                'listProfiles' => $listProfiles,
+                'listStatus' => $listStatus,
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //user Authtorize
+    public function userAuthtorize(AuthorizerRequest $req)
+    {
+
+        DB::beginTransaction();
+
+        try {
+            //generate password 
+            $password = (new  ComunFunctionsController)->generatePassword();
+
+            //update data
+            User::where('id_dato_usuario', $req->id_dato_usuario)
+                ->update(
+                    [
+                        'correo' => $req->correo,
+                        'password' => Hash::make($password),
+                        'id_usuario_crea' => auth()->user()->id_dato_usuario,
+                        'id_cat_planta' => $req->id_cat_planta,
+                        'id_cat_cliente' => $req->id_cat_cliente,
+                        'id_cat_estatus' => $req->id_cat_estatus,
+                        'id_cat_perfil' => $req->id_cat_perfil,
+                        'fecha_creacion' => Carbon::now()->format('Y-m-d H:i:s')
+
+                    ]
+                );
+            userData::where('id_dato_usuario', $req->id_dato_usuario)
+                ->update(
+                    [
+                        'nombre' => $req->nombre,
+                        'apellido_paterno' => $req->apellido_paterno,
+                        'apellido_materno' => $req->apellido_materno,
+                    ]
+                );
+
+
+            //send email 
+            $subject = 'Contraseña General Products';
+            Mail::to($req->correo)->send(new resetPassword($password, $subject));
+
+
+            DB::commit();
+
+            return response()->json([
+                'result' => true,
+                'message' => "Usuario Autorizado con éxito"
+            ], 201);
+        } catch (\Exception $exception) {
+            DB::rollback();
             //internal server error reponse 
             return response()->json([
                 'result' => false,

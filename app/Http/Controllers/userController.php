@@ -199,7 +199,8 @@ class userController extends Controller
             User::where('correo', $correo)
                 ->update(['password' => Hash::make($password)]);
             //send email
-            Mail::to($correo)->send(new resetPassword($password));
+            $subject = 'Recuperacion De Contraseña';
+            Mail::to($correo)->send(new resetPassword($password, $subject));
             //reponse
             return response()->json([
                 'result' => true,
