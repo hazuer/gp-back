@@ -43,4 +43,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('autorizar-usuarios', 'userActionsController@userAuthtorize')->middleware('accessAdminSupervisor');
     //update user data
     Route::post('editar-usuarios-datos', 'userActionsController@updateUserData')->middleware('accessAdminSupervisor');
+    //deactivate user 
+    Route::post('desactivar-usuarios', 'userActionsController@userDeactivate')->middleware('accessAdminSupervisor');
+    //update user permissions
+    Route::post('editar-Usuarios-permisos', 'userActionsController@updateUserPermissions');
 });

@@ -9,10 +9,12 @@ use App\catCustomers;
 use App\catPlants;
 use App\catProfiles;
 use App\catStatus;
+use App\orderWork;
 use App\Mail\resetPassword;
 use App\Http\Controllers\ComunFunctionsController;
 use App\Http\Requests\AuthorizerRequest;
 use App\Http\Requests\UpdateUserRequest;
+use App\Http\Requests\UserDeactivateRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -315,4 +317,55 @@ class userActionsController extends Controller
             ], 500);
         }
     }
+
+
+    //user deactivate function
+    public function userDeactivate(UserDeactivateRequest $req)
+    {
+        try {
+            //validation orderwork 
+            $numOrders = orderWork::where('id_operador_responsable', $req->id_dato_usuario)
+                ->whereIN('id_cat_estatus_ot', [1, 2, 3, 5])
+                ->count();
+
+
+            if ($numOrders > 0) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "El usuario no puede ser desactivado,
+                     aun tiene ordenes de trabajo, sin terminar"
+                ], 201);
+            }
+
+
+            //update 
+            User::where('id_dato_usuario', $req->id_dato_usuario)
+                ->update(
+                    [
+                        'id_cat_estatus' => $req->id_cat_estatus,
+                        'id_usuario_elimina' => auth()->user()->id_dato_usuario,
+                        'fecha_eliminacion' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
+
+            return response()->json([
+                'result' => true,
+                'message' => "Usuario desactivado con éxito"
+            ], 201);
+        } catch (\Exception $exception) {
+
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //
+
+
+
+
+
 }
