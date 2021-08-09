@@ -46,5 +46,5 @@ Route::group(['middleware' => 'auth:api'], function () {
     //deactivate user 
     Route::post('desactivar-usuarios', 'userActionsController@userDeactivate')->middleware('accessAdminSupervisor');
     //update user permissions
-    Route::post('editar-Usuarios-permisos', 'userActionsController@updateUserPermissions');
+    Route::post('editar-usuarios-permisos', 'userActionsController@updateUserPermissions');
 });

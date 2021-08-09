@@ -32,6 +32,7 @@ class orderWork extends Model
         'linea',
         'id_cat_planta',
         'id_operador_responsable',
+        'id_cat_estatus_ot',
         'fecha_cierre_orden',
         'id_cat_planta',
         'codigo_QR',

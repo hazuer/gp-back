@@ -15,6 +15,7 @@ use App\Http\Controllers\ComunFunctionsController;
 use App\Http\Requests\AuthorizerRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Requests\UserDeactivateRequest;
+use App\Http\Requests\UserPermissionRequest;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;
@@ -332,8 +333,7 @@ class userActionsController extends Controller
             if ($numOrders > 0) {
                 return response()->json([
                     'result' => false,
-                    'message' => "El usuario no puede ser desactivado,
-                     aun tiene ordenes de trabajo, sin terminar"
+                    'message' => "El usuario no puede ser desactivado, aun tiene ordenes de trabajo sin terminar"
                 ], 201);
             }
 
@@ -362,10 +362,30 @@ class userActionsController extends Controller
         }
     }
 
-    //
+    //user update permission 
+    public function updateUserPermissions(UserPermissionRequest $req)
+    {
+        try {
+            User::where('id_dato_usuario', $req->id_dato_usuario)
+                ->update(
+                    [
+                        'id_cat_perfil' => $req->id_cat_perfil,
+                        'id_usuario_modifica' => auth()->user()->id_dato_usuario,
+                        'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
+                    ]
+                );
 
+            return response()->json([
+                'result' => true,
+                'message' => "Usuario editado con exito"
+            ], 201);
+        } catch (\Exception $exception) {
 
-
-
-
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
 }
