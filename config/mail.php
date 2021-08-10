@@ -1,5 +1,12 @@
 <?php
 
+use Illuminate\Support\Facades\DB;
+
+//get db smpt
+
+$smtp = DB::table('configuracion_smtp')->first();
+
+
 return [
 
     /*
@@ -13,7 +20,7 @@ return [
     |
     */
 
-    'default' => env('MAIL_MAILER', 'smtp'),
+    'default' =>  'smtp',
 
     /*
     |--------------------------------------------------------------------------
@@ -36,11 +43,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' => env('MAIL_HOST', 'smtp.mailgun.org'),
-            'port' => env('MAIL_PORT', 587),
-            'encryption' => env('MAIL_ENCRYPTION', 'tls'),
-            'username' => env('MAIL_USERNAME'),
-            'password' => env('MAIL_PASSWORD'),
+            'host' => $smtp->host,
+            'port' => $smtp->port,
+            'encryption' => $smtp->encryption,
+            'username' => $smtp->username,
+            'password' => $smtp->password,
             'timeout' => null,
             'auth_mode' => null,
         ],
@@ -84,7 +91,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'address' => $smtp->from_address,
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 
