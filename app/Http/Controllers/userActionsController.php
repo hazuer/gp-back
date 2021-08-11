@@ -79,8 +79,7 @@ class userActionsController extends Controller
                     'cat_perfil.perfil',
                     'cat_planta.nombre_planta',
                     'cat_cliente.nombre_cliente'
-                )
-                ->where('datos_usuario.id_dato_usuario', '!=', auth()->user()->id_dato_usuario);
+                );
 
 
             //if search contain name
@@ -97,12 +96,12 @@ class userActionsController extends Controller
             }
             //if search contain status
             if ($req->has('id_cat_estatus')) {
-                $query->orWhere('usuario.id_cat_estatus', $req->id_cat_status);
+                $query->Where('usuario.id_cat_estatus', $req->id_cat_status);
             }
             //if search contain profile type
 
             if ($req->has('id_cat_perfil')) {
-                $query->orWhere('usuario.id_cat_perfil', $req->id_cat_perfil);
+                $query->Where('usuario.id_cat_perfil', $req->id_cat_perfil);
             }
 
             //valid  type perfil
@@ -119,11 +118,13 @@ class userActionsController extends Controller
                     break;
                 case 4:
                     //if user is supervisor just can see your own plants and customers
-                    $query->Where('usuario.id_cat_planta', auth()->user()->id_cat_planta)
-                        ->where('usuario.id_cat_cliente', auth()->user()->id_cat_cliente);
+                    $query->orWhere('usuario.id_cat_planta', '=', auth()->user()->id_cat_planta)
+                        ->orwhere('usuario.id_cat_cliente', '=', auth()->user()->id_cat_cliente);
                     break;
                 default:
             }
+
+
 
             //method sort
             $direction  = "ASC";
