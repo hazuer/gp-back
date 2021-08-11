@@ -14,11 +14,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
-
-
 //login
 Route::post('login', 'userController@logIn');
 //form register data
@@ -28,7 +23,6 @@ Route::post('registrar-usuario', 'userController@register');
 //password reset
 Route::post('recuperar-contraseña', 'userController@resetPassword');
 
-Route::get('listar-usuarios', 'userActionsController@userList');
 
 Route::group(['middleware' => 'auth:api'], function () {
     //close session
