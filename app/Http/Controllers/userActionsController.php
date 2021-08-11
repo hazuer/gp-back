@@ -109,7 +109,7 @@ class userActionsController extends Controller
                 case 1:
                     //if search contain plant
                     if ($req->has('id_cat_planta')) {
-                        $query->orWhere('datos_usuario.id_cat_estatus', $req->id_cat_planta);
+                        $query->orWhere('usuario.id_cat_estatus', $req->id_cat_planta);
                     }
                     //if serach contain cliente
                     if ($req->has('id_cat_cliente')) {
