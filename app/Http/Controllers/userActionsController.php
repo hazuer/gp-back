@@ -364,29 +364,32 @@ class userActionsController extends Controller
     }
 
     //user update permission 
-    public function updateUserPermissions(UserPermissionRequest $req)
-    {
-        try {
-            User::where('id_dato_usuario', $req->id_dato_usuario)
-                ->update(
-                    [
-                        'id_cat_perfil' => $req->id_cat_perfil,
-                        'id_usuario_modifica' => auth()->user()->id_dato_usuario,
-                        'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
-                    ]
-                );
+    // public function updateUserPermissions(UserPermissionRequest $req)
+    // {
+    //     try {
+    //         User::where('id_dato_usuario', $req->id_dato_usuario)
+    //             ->update(
+    //                 [
+    //                     'id_cat_perfil' => $req->id_cat_perfil,
+    //                     'id_usuario_modifica' => auth()->user()->id_dato_usuario,
+    //                     'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
+    //                 ]
+    //             );
 
-            return response()->json([
-                'result' => true,
-                'message' => "Usuario editado con exito"
-            ], 201);
-        } catch (\Exception $exception) {
+    //         return response()->json([
+    //             'result' => true,
+    //             'message' => "Usuario editado con exito"
+    //         ], 201);
+    //     } catch (\Exception $exception) {
 
-            //internal server error reponse 
-            return response()->json([
-                'result' => false,
-                'message' => $exception->getMessage()
-            ], 500);
-        }
-    }
+    //         //internal server error reponse 
+    //         return response()->json([
+    //             'result' => false,
+    //             'message' => $exception->getMessage()
+    //         ], 500);
+    //     }
+    // }
+
+
+
 }
