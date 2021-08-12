@@ -72,6 +72,7 @@ class userActionsController extends Controller
 
                 ->select(
                     'datos_usuario.id_dato_usuario',
+                    'usuario.correo',
                     'datos_usuario.nombre',
                     'datos_usuario.apellido_paterno',
                     'datos_usuario.apellido_materno',
