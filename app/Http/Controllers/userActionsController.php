@@ -97,12 +97,12 @@ class userActionsController extends Controller
             }
             //if search contain status
             if ($req->has('id_cat_estatus')) {
-                $query->Where('usuario.id_cat_estatus', $req->id_cat_status);
+                $query->orWhere('usuario.id_cat_estatus', '=', $req->id_cat_estatus);
             }
             //if search contain profile type
 
             if ($req->has('id_cat_perfil')) {
-                $query->Where('usuario.id_cat_perfil', $req->id_cat_perfil);
+                $query->orWhere('usuario.id_cat_perfil', '=', $req->id_cat_perfil);
             }
 
             //valid  type perfil
