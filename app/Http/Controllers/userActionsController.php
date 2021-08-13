@@ -84,24 +84,24 @@ class userActionsController extends Controller
 
 
             //if search contain name
-            if ($req->has('nombre')) {
+            if ($req->has('nombre') && !is_null($req->nombre)) {
                 $query->orWhereRaw("datos_usuario.nombre  LIKE '%" . $req->nombre . "%'");
             }
             //if search contain last name
-            if ($req->has('apellido_paterno')) {
+            if ($req->has('apellido_paterno') && !is_null($req->apellido_paterno)) {
                 $query->orWhereRaw("datos_usuario.apellido_paterno  LIKE '%" . $req->apellido_paterno . "%'");
             }
             //if search contain secondary last name
-            if ($req->has('apellido_materno')) {
+            if ($req->has('apellido_materno')  && !is_null($req->pellido_materno)) {
                 $query->orWhereRaw("datos_usuario.apellido_materno  LIKE '%" . $req->pellido_materno . "%'");
             }
             //if search contain status
-            if ($req->has('id_cat_estatus')) {
+            if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
                 $query->orWhere('usuario.id_cat_estatus', '=', $req->id_cat_estatus);
             }
             //if search contain profile type
 
-            if ($req->has('id_cat_perfil')) {
+            if ($req->has('id_cat_perfil') && !is_null($req->id_cat_perfil)) {
                 $query->orWhere('usuario.id_cat_perfil', '=', $req->id_cat_perfil);
             }
 
@@ -109,11 +109,11 @@ class userActionsController extends Controller
             switch (auth()->user()->id_cat_perfil) {
                 case 1:
                     //if search contain plant
-                    if ($req->has('id_cat_planta')) {
+                    if ($req->has('id_cat_planta') && !is_null($req->id_cat_planta)) {
                         $query->orWhere('usuario.id_cat_estatus', $req->id_cat_planta);
                     }
                     //if serach contain cliente
-                    if ($req->has('id_cat_cliente')) {
+                    if ($req->has('id_cat_cliente') && !is_null($req->id_cat_cliente)) {
                         $query->orWhere('usuario.id_cat_cliente', $req->id_cat_cliente);
                     }
                     break;
@@ -130,7 +130,7 @@ class userActionsController extends Controller
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !empty($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -163,8 +163,8 @@ class userActionsController extends Controller
             //order list
             $query->orderBy($sortField, $direction);
 
-            $perPage = $req->has('porPagina') ? intVal($req->porPagina) : 10; //num result per page
-            $actualPage = $req->has('pagina') ? intVal($req->pagina) : 1; //actual page
+            $perPage = $req->has('porPagina') && !is_null($req->porPagina)  ? intVal($req->porPagina) : 10; //num result per page
+            $actualPage = $req->has('pagina') && !is_null($req->pagina) ? intVal($req->pagina) : 1; //actual page
             $usersTotal = $query->count(); //total rows
             $usersList = $query->offset(($actualPage - 1) * $perPage)->limit($perPage)->get(); //result
 
