@@ -86,4 +86,15 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-clientes', 'catCustomersController@updateCustomer');
     //active deactive and delete Customer
     Route::post('catalogo/editar-estatus-clientes', 'catCustomersController@activeDeactiveDeleteCustomer');
+
+
+
+    //list Machines Catalog
+    Route::get('catalogo/listar-maquinas', 'catMachinesController@machinesList')->middleware('accessAdminSupervisor');
+    //create Machine
+    Route::post('catalogo/crear-maquinas', 'catMachinesController@registerMachine');
+    //update Machine
+    Route::post('catalogo/editar-maquinas', 'catMachinesController@updateMachine');
+    //active deactive and delete Machine
+    Route::post('catalogo/editar-estatus-maquinas', 'catMachinesController@activeDeactiveDeleteMachine');
 });

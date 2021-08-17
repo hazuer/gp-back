@@ -169,18 +169,18 @@ class catCustomersController extends Controller
                 }
             }
             //update status customer
-            $updateRaesonstatus = catCustomers::find($req->id_cat_cliente);
-            $updateRaesonstatus->id_cat_estatus = $req->id_cat_estatus;
+            $updateCustomerstatus = catCustomers::find($req->id_cat_cliente);
+            $updateCustomerstatus->id_cat_estatus = $req->id_cat_estatus;
             //validation if customer will be delete
             if ($req->id_cat_estatus == 3) {
-                $updateRaesonstatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
-                $updateRaesonstatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCustomerstatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
+                $updateCustomerstatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
             } else {
-                $updateRaesonstatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
-                $updateRaesonstatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCustomerstatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
+                $updateCustomerstatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             }
 
-            if ($updateRaesonstatus->save()) {
+            if ($updateCustomerstatus->save()) {
                 return response()->json([
                     'result' => true,
                     'message' => "Actualizacion de estatus con éxito"

@@ -15,8 +15,6 @@ class catPlantsController extends Controller
 {
 
 
-
-
     //function  plants list
     public function plantsList(Request $req)
     {
@@ -93,9 +91,7 @@ class catPlantsController extends Controller
     //function regiter plant
     public function registerPlant(RegisterPlantRequest $req)
     {
-
         try {
-
             $newPlant = new  catPlants;
             $newPlant->nombre_planta = $req->nombre_planta;
             $newPlant->id_cat_pais = $req->id_cat_pais;
