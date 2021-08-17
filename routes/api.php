@@ -80,10 +80,10 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //list Customers Catalog
     Route::get('catalogo/listar-clientes', 'catCustomersController@customersList')->middleware('accessAdminSupervisor');
-    //create Country
+    //create Customer
     Route::post('catalogo/crear-clientes', 'catCustomersController@registerCustomer');
-    //update Country
+    //update Customer
     Route::post('catalogo/editar-clientes', 'catCustomersController@updateCustomer');
-    //active deactive and delete Country
+    //active deactive and delete Customer
     Route::post('catalogo/editar-estatus-clientes', 'catCustomersController@activeDeactiveDeleteCustomer');
 });
