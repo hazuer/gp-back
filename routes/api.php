@@ -68,7 +68,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
 
-    //list Country Catalog
+    //list Countries Catalog
     Route::get('catalogo/listar-paises', 'catCountriesController@countryList')->middleware('accessAdminSupervisor');
     //create Country
     Route::post('catalogo/crear-paises', 'catCountriesController@registerCountry');
@@ -76,4 +76,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-paises', 'catCountriesController@updateCountry');
     //active deactive and delete Country
     Route::post('catalogo/editar-estatus-paises', 'catCountriesController@activeDeactiveDeleteCountry');
+
+
+    //list Customers Catalog
+    Route::get('catalogo/listar-clientes', 'catCustomersController@customersList')->middleware('accessAdminSupervisor');
+    //create Country
+    Route::post('catalogo/crear-clientes', 'catCustomersController@registerCustomer');
+    //update Country
+    Route::post('catalogo/editar-clientes', 'catCustomersController@updateCustomer');
+    //active deactive and delete Country
+    Route::post('catalogo/editar-estatus-clientes', 'catCustomersController@activeDeactiveDeleteCustomer');
 });

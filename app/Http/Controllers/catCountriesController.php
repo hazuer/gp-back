@@ -42,7 +42,7 @@ class catCountriesController extends Controller
                 $sortField = Str::of($sortField)->substr(1);
             }
             switch ($sortField) {
-                case 'nombre_planta':
+                case 'nombre_pais':
                     $sortField = "cat_pais.nombre_pais";
                     break;
                 case 'id_cat_estatus':

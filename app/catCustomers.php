@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class catCustomers extends Model
 {
-
     //select table
     protected $table = 'cat_cliente';
     //select primar kye
