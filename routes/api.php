@@ -41,4 +41,39 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('desactivar-usuarios', 'userActionsController@userDeactivate')->middleware('accessAdminSupervisor');
     //update user permissions
     //Route::post('editar-usuarios-permisos', 'userActionsController@updateUserPermissions');
+
+
+    //data list countries  and status
+    Route::get('catalogo/paises-estatus-listas', 'ComunFunctionsController@countriesStatusList')->middleware('accessAdminSupervisor');
+    //list Plants Catalog 
+    Route::get('catalogo/listar-plantas', 'catPlantsController@plantsList')->middleware('accessAdminSupervisor');
+    //create plants
+    Route::post('catalogo/crear-plantas', 'catPlantsController@registerPlant')->middleware('accessAdminSupervisor');
+    //update plant
+    Route::post('catalogo/editar-plantas', 'catPlantsController@updatePlant');
+    //active deactive and delete plant
+    Route::post('catalogo/editar-estatus-planta', 'catPlantsController@activeDeactiveDeletePlant');
+
+
+    //data list plants  and status
+    Route::get('catalogo/plantas-estatus-listas', 'ComunFunctionsController@plantsStatusList')->middleware('accessAdminSupervisor');
+    //list Country Catalog
+    Route::get('catalogo/listar-razones', 'catReasonsController@reasonsList')->middleware('accessAdminSupervisor');
+    //create Country
+    Route::post('catalogo/crear-razones', 'catReasonsController@registerReason')->middleware('accessAdminSupervisor');
+    //update Country
+    Route::post('catalogo/editar-razones', 'catReasonsController@updateReason');
+    //active deactive and delete Country
+    Route::post('catalogo/editar-estatus-razones', 'catReasonsController@activeDeactiveDeleteReazon');
+
+
+
+    //list Country Catalog
+    Route::get('catalogo/listar-paises', 'catCountriesController@countryList')->middleware('accessAdminSupervisor');
+    //create Country
+    Route::post('catalogo/crear-paises', 'catCountriesController@registerCountry');
+    //update Country
+    Route::post('catalogo/editar-paises', 'catCountriesController@updateCountry');
+    //active deactive and delete Country
+    Route::post('catalogo/editar-estatus-paises', 'catCountriesController@activeDeactiveDeleteCountry');
 });

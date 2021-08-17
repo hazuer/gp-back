@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
+use App\catPlants;
+use App\catStatus;
+use App\catCountries;
 
 class ComunFunctionsController extends Controller
 {
@@ -32,5 +33,47 @@ class ComunFunctionsController extends Controller
         $password = str_shuffle($upper . $result . $number . $special);
         //retunr password
         return $password;
+    }
+
+
+    public function countriesStatusList()
+    {
+        try {
+            $listCountries = catCountries::select('id_cat_pais', 'nombre_pais')->get();
+            $listStatus = catStatus::all();
+
+            return response()->json([
+                'result' => true,
+                'listCountries' => $listCountries,
+                'listStatus' => $listStatus,
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function plantsStatusList()
+    {
+        try {
+            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')->get();
+            $listStatus = catStatus::all();
+
+            return response()->json([
+                'result' => true,
+                'listPlants' => $listPlants,
+                'listStatus' => $listStatus,
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
     }
 }

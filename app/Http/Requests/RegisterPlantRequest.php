@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class RegisterPlantRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-
+        //if user is admin or supervisor
         if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 4) {
             return true;
         } else {
@@ -30,12 +30,8 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_dato_usuario' => 'required',
-            'correo' => 'required|max:75|unique:usuario,correo,' . request('id_dato_usuario') . ',id_dato_usuario',
-            'id_cat_planta' => 'required',
-            'id_cat_cliente' => 'required',
-            'id_cat_perfil' => 'required',
-            'id_cat_estatus' => 'required'
+            'nombre_planta' => 'required|unique:cat_planta,nombre_planta|max:255',
+            'id_cat_pais' => 'required'
         ];
     }
 }

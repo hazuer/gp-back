@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateUserRequest extends FormRequest
+class UpdateReasonRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,8 @@ class UpdateUserRequest extends FormRequest
      */
     public function authorize()
     {
-
-        if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 4) {
+        //if user is admin 
+        if (auth()->user()->id_cat_perfil == 1) {
             return true;
         } else {
 
@@ -30,12 +30,9 @@ class UpdateUserRequest extends FormRequest
     public function rules()
     {
         return [
-            'id_dato_usuario' => 'required',
-            'correo' => 'required|max:75|unique:usuario,correo,' . request('id_dato_usuario') . ',id_dato_usuario',
-            'id_cat_planta' => 'required',
-            'id_cat_cliente' => 'required',
-            'id_cat_perfil' => 'required',
-            'id_cat_estatus' => 'required'
+            'id_cat_razon' => 'required',
+            'razon' => 'required|max:255|unique:cat_razon,razon,' . request('id_cat_razon') . ',id_cat_razon',
+            'id_cat_planta' => 'required'
         ];
     }
 }

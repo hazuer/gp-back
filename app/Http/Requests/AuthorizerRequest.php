@@ -32,7 +32,7 @@ class AuthorizerRequest extends FormRequest
     {
         return [
             'id_dato_usuario' => 'required',
-            'correo' => 'required|max:75|unique:usuario,correo,NULL,NULL,id_dato_usuario,' . request('id_dato_usario'),
+            'correo' => 'required|max:75|unique:usuario,correo,' . request('id_dato_usuario') . ',id_dato_usuario',
             'nombre' => 'required|max:50',
             'apellido_paterno' => 'required|max:50',
             'apellido_materno' => 'nullable|max:50',
