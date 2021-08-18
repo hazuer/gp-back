@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterReasonRequest extends FormRequest
+class ActiveDeactiveDeleteTaraRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,8 @@ class RegisterReasonRequest extends FormRequest
      */
     public function authorize()
     {
-        //if user is admin or supervisor
-        if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 4) {
+        //if user is admin 
+        if (auth()->user()->id_cat_perfil == 1) {
             return true;
         } else {
 
@@ -30,8 +30,8 @@ class RegisterReasonRequest extends FormRequest
     public function rules()
     {
         return [
-            'razon' => 'required|max:255',
-            'id_cat_planta' => 'required'
+            'id_cat_tara' => 'required',
+            'id_cat_estatus' => 'required'
         ];
     }
 }

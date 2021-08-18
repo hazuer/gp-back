@@ -97,4 +97,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-maquinas', 'catMachinesController@updateMachine');
     //active deactive and delete Machine
     Route::post('catalogo/editar-estatus-maquinas', 'catMachinesController@activeDeactiveDeleteMachine');
+
+
+    //list Taras Catalog
+    Route::get('catalogo/listar-taras', 'catTarasController@tarasList')->middleware('accessAdminSupervisor');
+    //create Tara
+    Route::post('catalogo/crear-taras', 'catTarasController@registerTara');
+    //update Tara
+    Route::post('catalogo/editar-taras', 'catTarasController@updateTara');
+    //active deactive and delete Tara
+    Route::post('catalogo/editar-estatus-taras', 'catTarasController@activeDeactiveDeleteTara');
 });

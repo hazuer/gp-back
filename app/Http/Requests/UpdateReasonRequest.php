@@ -31,7 +31,7 @@ class UpdateReasonRequest extends FormRequest
     {
         return [
             'id_cat_razon' => 'required',
-            'razon' => 'required|max:255|unique:cat_razon,razon,' . request('id_cat_razon') . ',id_cat_razon',
+            'razon' => 'required|max:255',
             'id_cat_planta' => 'required'
         ];
     }

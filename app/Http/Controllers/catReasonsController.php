@@ -91,6 +91,18 @@ class catReasonsController extends Controller
     public function registerReason(RegisterReasonRequest $req)
     {
         try {
+
+            //valid if existe razon
+            if (catReasons::where('razon', $req->razon)
+                ->where('id_cat_planta', $req->id_cat_planta)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "ya existe una razon con este nombre asignada a esta planta"
+                ], 401);
+            }
+            //insert reazon
             $newReason = new  catReasons;
             $newReason->razon = $req->razon;
             $newReason->id_cat_planta = $req->id_cat_planta;
@@ -122,6 +134,18 @@ class catReasonsController extends Controller
     public function updateReason(UpdateReasonRequest $req)
     {
         try {
+            //valid if existe razon 
+            if (catReasons::where('razon', $req->razon)
+                ->where('id_cat_planta', $req->id_cat_planta)
+                ->where('id_cat_razon', '<>', $req->id_cat_razon)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "ya existe una razon con este nombre asignada a esta planta"
+                ], 401);
+            }
+            //update razon
             $updateReason = catReasons::find($req->id_cat_razon);
             $updateReason->razon = $req->razon;
             $updateReason->id_cat_planta = $req->id_cat_planta;
@@ -154,14 +178,22 @@ class catReasonsController extends Controller
             //validation if reazon will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
 
-                $numOrders = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                //count num orders deliveries that doesn't closed
+                $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
-                    ->leftJoin('cat_razon', 'cat_razon.id_cat_razon', 'entrega_detalle_tinta.id_cat_razon')
-                    ->where('cat_razon.id_cat_razon', $req->id_cat_razon)
+                    ->where('entrega_detalle_tinta.id_cat_razon', $req->id_cat_razon)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
                     ->count();
 
-                if ($numOrders > 0) {
+                //count num orders return that doesn't closed
+                $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                    ->leftJoin('devolucion_detalle_tinta', 'devolucion_detalle_tinta.id_devolucion', 'devolucion.id_devolucion')
+                    ->where('devolucion_detalle_tinta.id_cat_razon', $req->id_cat_razon)
+                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->count();
+
+
+                if ($numOrderDeliveries > 0 ||  $numOrdersReturn > 0) {
                     return response()->json([
                         'result' => false,
                         'message' => "La razon no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"

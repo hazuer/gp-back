@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterReasonRequest extends FormRequest
+class RegisterTaraRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,7 +30,8 @@ class RegisterReasonRequest extends FormRequest
     public function rules()
     {
         return [
-            'razon' => 'required|max:255',
+            'nombre_tara' => 'required|max:75',
+            'capacidad' => 'nullable',
             'id_cat_planta' => 'required'
         ];
     }
