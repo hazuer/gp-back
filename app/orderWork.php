@@ -10,12 +10,12 @@ class orderWork extends Model
 
     //select table
     protected $table = 'orden_trabajo';
-    //select primar key
 
-    //
-    public $timestamps = false;
-    //
+    //select primary key
     protected $primaryKey = 'id_orden_trabajo';
+
+    //  
+    public $timestamps = false;
     /**
      * The attributes that are mass assignable.
      *

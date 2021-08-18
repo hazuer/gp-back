@@ -8,7 +8,7 @@ class catCustomers extends Model
 {
     //select table
     protected $table = 'cat_cliente';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_cliente';
     //
     public $timestamps = false;

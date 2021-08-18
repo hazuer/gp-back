@@ -92,7 +92,17 @@ class catCustomersController extends Controller
     public function registerCustomer(RegisterCustomerRequest $req)
     {
         try {
-
+            //valid if customer exists
+            if (catCustomers::where('nombre_cliente', $req->nombre_cliente)
+                ->where('id_cat_planta', $req->id_cat_planta)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "ya existe una cliente con este nombre asignada a esta planta"
+                ], 401);
+            }
+            //register customer
             $newCustomer = new  catCustomers;
             $newCustomer->nombre_cliente = $req->nombre_cliente;
             $newCustomer->id_cat_planta = $req->id_cat_planta;
@@ -123,6 +133,18 @@ class catCustomersController extends Controller
     public function updateCustomer(UpdateCustomerRequest $req)
     {
         try {
+            //valid if customer exists
+            if (catCustomers::where('nombre_cliente', $req->nombre_cliente)
+                ->where('id_cat_planta', $req->id_cat_planta)
+                ->where('id_cat_cliente', '<>', $req->id_cat_cliente)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "ya existe una cliente con este nombre asignada a esta planta"
+                ], 401);
+            }
+            //update customer
             $updateCustomer =   catCustomers::find($req->id_cat_cliente);
             $updateCustomer->nombre_cliente = $req->nombre_cliente;
             $updateCustomer->id_cat_planta = $req->id_cat_planta;
@@ -170,7 +192,7 @@ class catCustomersController extends Controller
                 if ($numOrderDeliveries > 0 || $numOrdersReturn > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "El cliente no puede ser desactivada o eliminado, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El cliente no puede ser desactivado o eliminado, aun tiene ordenes de trabajo sin terminar"
                     ], 201);
                 }
             }

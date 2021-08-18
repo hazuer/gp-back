@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class catStatus extends Model
 {
     protected $table = 'cat_estatus';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_estatus';
     //
     public $timestamps = false;

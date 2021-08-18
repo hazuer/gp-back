@@ -32,7 +32,7 @@ class UpdateCustomerRequest extends FormRequest
     {
         return [
             'id_cat_cliente' => 'required',
-            'nombre_cliente' => 'required|max:255|unique:cat_cliente,nombre_cliente,' . request('id_cat_cliente') . ',id_cat_cliente',
+            'nombre_cliente' => 'required|max:255',
             'id_cat_planta' => 'required'
         ];
     }

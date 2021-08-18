@@ -9,7 +9,7 @@ class catCountries extends Model
 
     //select table
     protected $table = 'cat_pais';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_pais';
     //
     public $timestamps = false;

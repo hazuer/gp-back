@@ -107,4 +107,14 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-taras', 'catTarasController@updateTara');
     //active deactive and delete Tara
     Route::post('catalogo/editar-estatus-taras', 'catTarasController@activeDeactiveDeleteTara');
+
+
+    //list Inks Catalog
+    Route::get('catalogo/listar-tintas', 'catInksControllers@inksList')->middleware('accessAdminSupervisor');
+    //create Ink
+    Route::post('catalogo/crear-tintas', 'catInksControllers@registerInk');
+    //update Ink
+    Route::post('catalogo/editar-tintas', 'catInksControllers@updateInk');
+    //active deactive and delete Ink
+    Route::post('catalogo/editar-estatus-tintas', 'catInksControllers@activeDeactiveDeleteInk');
 });

@@ -8,7 +8,7 @@ class catPlants extends Model
 {
     //select table
     protected $table = 'cat_planta';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_planta';
     //
     public $timestamps = false;

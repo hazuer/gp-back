@@ -190,19 +190,19 @@ class catTarasController extends Controller
         try {
             //validation if tara will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
-                //count num orders deliveries that doesn't closed
+                //count num deliveries orders that doesn't closed
                 $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
                     ->where('entrega_detalle_tinta.id_cat_tara', $req->id_cat_tara)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
                     ->count();
-                //count num orders return that doesn't closed
+                //count num return orders that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('devolucion_detalle_tinta', 'devolucion_detalle_tinta.id_devolucion', 'devolucion.id_devolucion')
                     ->where('devolucion_detalle_tinta.id_cat_tara', $req->id_cat_tara)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
                     ->count();
-                //count num orders int detail that doesn't closed
+                //count num ink detail orders that doesn't closed
                 $numOrdersInkdetail = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('ot_detalle_tinta.id_cat_tara', $req->id_cat_tara)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])

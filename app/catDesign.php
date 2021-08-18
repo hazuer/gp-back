@@ -8,7 +8,7 @@ class catDesign extends Model
 {
     //select table
     protected $table = 'cat_diseno';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_diseno';
     //
     public $timestamps = false;

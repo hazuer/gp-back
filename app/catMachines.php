@@ -8,7 +8,7 @@ class catMachines extends Model
 {
     //select table
     protected $table = 'cat_maquina';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_maquina';
     //
     public $timestamps = false;

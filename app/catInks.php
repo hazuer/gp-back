@@ -4,12 +4,12 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class catTaras extends Model
+class catInks extends Model
 {
     //select table
-    protected $table = 'cat_tara';
+    protected $table = 'cat_tinta';
     //select primary key
-    protected $primaryKey = 'id_cat_tara';
+    protected $primaryKey = 'id_cat_tinta';
     //
     public $timestamps = false;
     /**
@@ -17,10 +17,10 @@ class catTaras extends Model
      *
      * @var array
      */
-
     protected $fillable = [
-        'nombre_tara',
-        'capacidad',
+        'nombre_tinta',
+        'codigo_sap',
+        'codigo_gp',
         'id_cat_planta',
         'id_cat_estatus',
         'id_usuario_crea',

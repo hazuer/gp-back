@@ -8,7 +8,7 @@ class catReasons extends Model
 {
     //select table
     protected $table = 'cat_razon';
-    //select primar kye
+    //select primary key
     protected $primaryKey = 'id_cat_razon';
     //
     public $timestamps = false;
