@@ -163,7 +163,7 @@ class catCustomersController extends Controller
 
                 //count num orders return that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
-                    ->where('devolucion.id_cliente_devuelve', $req->id_cat_razon)
+                    ->where('devolucion.id_cliente_devuelve', $req->id_cat_cliente)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
                     ->count();
 
