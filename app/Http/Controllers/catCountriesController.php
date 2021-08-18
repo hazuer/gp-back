@@ -145,7 +145,7 @@ class catCountriesController extends Controller
 
         try {
 
-            //validation if plant will be delete or deactive 
+            //validation if country will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
 
                 $numOrders = orderWork::leftJoin('cat_planta', 'cat_planta.id_cat_planta', 'orden_trabajo.id_cat_planta')

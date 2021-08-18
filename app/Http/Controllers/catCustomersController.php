@@ -155,16 +155,22 @@ class catCustomersController extends Controller
         try {
             //validation if customer will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
-
-                $numOrders = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                //count num orders deliveries that doesn't closed
+                $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('entrega.id_cliente_autoriza', $req->id_cat_cliente)
                     ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
                     ->count();
 
-                if ($numOrders > 0) {
+                //count num orders return that doesn't closed
+                $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                    ->where('devolucion.id_cliente_devuelve', $req->id_cat_razon)
+                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->count();
+
+                if ($numOrderDeliveries > 0 || $numOrdersReturn > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "El cliente no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El cliente no puede ser desactivada o eliminado, aun tiene ordenes de trabajo sin terminar"
                     ], 201);
                 }
             }
