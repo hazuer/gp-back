@@ -32,7 +32,7 @@ class inkImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
         //insert
         return new catInks([
             'nombre_tinta' => $row['nombre_tinta'],
-            'codigo_sap' => $row['codigo_sap'],
+            'codigo_cliente' => $row['codigo_cliente'],
             'codigo_gp' => $row['codigo_gp'],
             'id_cat_estatus'  => 1,
             'id_cat_planta'  => $this->plant,
@@ -45,7 +45,7 @@ class inkImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
     {
         return [
             '*.nombre_tinta' => ['required', 'max:75'],
-            '*.codigo_sap' => ['required', 'max:25'],
+            '*.codigo_cliente' => ['required', 'max:25'],
             '*.codigo_gp' => [
                 'required', 'max:25',
                 function ($attribute, $value, $onFailure) {

@@ -32,7 +32,7 @@ class UpdateInkRequest extends FormRequest
         return [
             'id_cat_tinta' => 'required',
             'nombre_tinta' => 'required|max:75',
-            'codigo_sap' => 'required|max:25',
+            'codigo_cliente' => 'required|max:25',
             'codigo_gp' => 'required|max:25',
             'id_cat_planta' => 'required',
         ];

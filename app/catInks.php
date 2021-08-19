@@ -19,7 +19,7 @@ class catInks extends Model
      */
     protected $fillable = [
         'nombre_tinta',
-        'codigo_sap',
+        'codigo_cliente',
         'codigo_gp',
         'id_cat_planta',
         'id_cat_estatus',

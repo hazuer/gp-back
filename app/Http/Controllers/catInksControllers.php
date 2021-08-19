@@ -27,7 +27,7 @@ class catInksControllers extends Controller
                 ->select(
                     'cat_tinta.id_cat_tinta',
                     'cat_tinta.nombre_tinta',
-                    'cat_tinta.codigo_sap',
+                    'cat_tinta.codigo_cliente',
                     'cat_tinta.codigo_gp',
                     'cat_planta.nombre_planta',
                     'cat_estatus.estatus'
@@ -36,9 +36,9 @@ class catInksControllers extends Controller
             if ($req->has('nombre_tinta') && !is_null($req->nombre_tinta)) {
                 $query->orWhereRaw("cat_tinta.nombre_tinta  LIKE '%" . $req->nombre_tinta . "%'");
             }
-            //if search has ink sap code
-            if ($req->has('codigo_sap') && !is_null($req->codigo_sap)) {
-                $query->orWhereRaw("cat_tinta.codigo_sap  LIKE '%" . $req->codigo_sap . "%'");
+            //if search has ink customer code
+            if ($req->has('codigo_cliente') && !is_null($req->codigo_cliente)) {
+                $query->orWhereRaw("cat_tinta.codigo_cliente  LIKE '%" . $req->codigo_cliente . "%'");
             }
 
             //if search has ink gp code
@@ -68,8 +68,8 @@ class catInksControllers extends Controller
                 case 'nombre_tinta':
                     $sortField = "cat_tinta.nombre_tinta";
                     break;
-                case 'codigo_sap':
-                    $sortField = "cat_tinta.codigo_sap";
+                case 'codigo_cliente':
+                    $sortField = "cat_tinta.codigo_cliente";
                     break;
                 case 'codigo_gp':
                     $sortField = "cat_tinta.codigo_gp";
@@ -122,7 +122,7 @@ class catInksControllers extends Controller
             //register ink
             $newInk = new  catInks;
             $newInk->nombre_tinta = $req->nombre_tinta;
-            $newInk->codigo_sap = $req->codigo_sap;
+            $newInk->codigo_cliente = $req->codigo_cliente;
             $newInk->codigo_gp = $req->codigo_gp;
             $newInk->id_cat_planta = $req->id_cat_planta;
             $newInk->id_cat_estatus = 1;
@@ -166,7 +166,7 @@ class catInksControllers extends Controller
             //update ink
             $updateInk = catInks::find($req->id_cat_tinta);
             $updateInk->nombre_tinta = $req->nombre_tinta;
-            $updateInk->codigo_sap = $req->codigo_sap;
+            $updateInk->codigo_cliente = $req->codigo_cliente;
             $updateInk->codigo_gp = $req->codigo_gp;
             $updateInk->id_usuario_modifica = auth()->user()->id_dato_usuario;
             $updateInk->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
