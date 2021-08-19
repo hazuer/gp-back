@@ -31,9 +31,9 @@ class userActionsController extends Controller
     {
         try {
 
-            $listCustomers = catCustomers::select('id_cat_cliente', 'nombre_cliente')->get();
-            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')->get();
-            $listProfiles = catProfiles::select('id_cat_perfil', 'perfil')->get();
+            $listCustomers = catCustomers::select('id_cat_cliente', 'nombre_cliente')->where('id_cat_estatus', 1)->get();
+            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')->where('id_cat_estatus', 1)->get();
+            $listProfiles = catProfiles::select('id_cat_perfil', 'perfil')->where('id_cat_estatus', 1)->get();
             $listStatus = catStatus::all();
 
             if (auth()->user()->id_cat_perfil == 4) {

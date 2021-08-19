@@ -27,9 +27,11 @@ class userController extends Controller
             //get plants 
             $catPlants = catPlants::select('id_cat_planta', 'nombre_planta')
                 ->where('id_cat_estatus', 1)
+                ->where('id_cat_estatus', 1)
                 ->get();
             //get customers     
             $catCustomers = catCustomers::select('id_cat_cliente', 'nombre_cliente')
+                ->where('id_cat_estatus', 1)
                 ->where('id_cat_estatus', 1)
                 ->get();
 

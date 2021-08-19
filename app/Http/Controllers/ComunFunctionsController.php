@@ -39,7 +39,9 @@ class ComunFunctionsController extends Controller
     public function countriesStatusList()
     {
         try {
-            $listCountries = catCountries::select('id_cat_pais', 'nombre_pais')->get();
+            $listCountries = catCountries::select('id_cat_pais', 'nombre_pais')
+                ->where('id_cat_estatus', 1)
+                ->get();
             $listStatus = catStatus::all();
 
             return response()->json([
@@ -60,7 +62,9 @@ class ComunFunctionsController extends Controller
     public function plantsStatusList()
     {
         try {
-            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')->get();
+            $listPlants = catPlants::select('id_cat_planta', 'nombre_planta')
+                ->where('id_cat_estatus', 1)
+                ->get();
             $listStatus = catStatus::all();
 
             return response()->json([
