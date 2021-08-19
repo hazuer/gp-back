@@ -54,7 +54,7 @@ class inkImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
                         ->where('id_cat_planta', $this->plant)
                         ->exists()
                     ) {
-                        $onFailure('El codigo_gp ' . $value . ' esta repetido en el documento o ya esta resgitrado para esta planta.');
+                        $onFailure('El codigo_gp ' . $value . ' esta repetido en el documento o ya esta registrado para esta planta.');
                     }
                 }
             ],
