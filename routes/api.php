@@ -117,4 +117,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-tintas', 'catInksControllers@updateInk');
     //active deactive and delete Ink
     Route::post('catalogo/editar-estatus-tintas', 'catInksControllers@activeDeactiveDeleteInk');
+    //import ink csc
+    Route::post('catalogo/importar-tintas-csv', 'catInksControllers@importInkCSV');
 });

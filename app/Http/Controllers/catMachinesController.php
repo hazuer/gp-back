@@ -190,7 +190,7 @@ class catMachinesController extends Controller
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
 
                 $numOrders = orderWork::where('id_cat_maquina', $req->id_cat_maquina)
-                    ->whereIN('id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 if ($numOrders > 0) {

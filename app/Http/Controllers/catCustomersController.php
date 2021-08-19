@@ -180,13 +180,13 @@ class catCustomersController extends Controller
                 //count num orders deliveries that doesn't closed
                 $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('entrega.id_cliente_autoriza', $req->id_cat_cliente)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num orders return that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('devolucion.id_cliente_devuelve', $req->id_cat_cliente)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 if ($numOrderDeliveries > 0 || $numOrdersReturn > 0) {

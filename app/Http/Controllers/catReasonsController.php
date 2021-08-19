@@ -182,14 +182,14 @@ class catReasonsController extends Controller
                 $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
                     ->where('entrega_detalle_tinta.id_cat_razon', $req->id_cat_razon)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num orders return that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('devolucion_detalle_tinta', 'devolucion_detalle_tinta.id_devolucion', 'devolucion.id_devolucion')
                     ->where('devolucion_detalle_tinta.id_cat_razon', $req->id_cat_razon)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
 

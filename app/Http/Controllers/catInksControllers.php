@@ -8,8 +8,11 @@ use App\catInks;
 use App\Http\Requests\RegisterInkRequest;
 use App\Http\Requests\UpdateInkRequest;
 use App\Http\Requests\ActiveDeactiveDeleteInkRequest;
+use App\Http\Requests\importInkCsvRequest;
+use App\Imports\inkImport;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
+use Maatwebsite\Excel\Facades\Excel;
 
 class catInksControllers extends Controller
 {
@@ -196,27 +199,27 @@ class catInksControllers extends Controller
                 //count num design orders that doesn't closed
                 $numOrderDesign = orderWork::leftJoin('diseno_tinta', 'diseno_tinta.id_cat_diseno', 'orden_trabajo.id_cat_diseno')
                     ->where('diseno_tinta.id_cat_tinta', $req->id_cat_tinta)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num deliveries orders that doesn't closed
                 $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
                     ->where('entrega_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num return orders that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('devolucion_detalle_tinta', 'devolucion_detalle_tinta.id_devolucion', 'devolucion.id_devolucion')
                     ->where('devolucion_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num ot ink detail orders that doesn't closed
                 $numOrdersInkdetail = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('ot_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 if ($numOrderDesign > 0 || $numOrderDeliveries > 0 || $numOrdersReturn > 0 || $numOrdersInkdetail > 0) {
@@ -257,5 +260,21 @@ class catInksControllers extends Controller
                 'message' => $exception->getMessage()
             ], 500);
         }
+    }
+
+    public function importInkCSV(importInkCsvRequest $req)
+    {
+        $plant = $req->id_cat_planta;   //id cat planta
+        $user = auth()->user()->id_dato_usuario;  //user creator
+        $dateNow = Carbon::now()->format('Y-m-d H:i:s');  //actual date
+        $file = $req->file('archivo_tintas_importar'); //request file
+        //import file
+        $import = new inkImport($plant, $user, $dateNow);
+        $import->import($file);
+        //return response
+        return response()->json([
+            'result' => true,
+            'message' => "Registro de tintas con éxito"
+        ], 201);
     }
 }

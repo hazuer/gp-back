@@ -151,7 +151,7 @@ class catCountriesController extends Controller
                 $numOrders = orderWork::leftJoin('cat_planta', 'cat_planta.id_cat_planta', 'orden_trabajo.id_cat_planta')
                     ->leftJoin('cat_pais', 'cat_pais.id_cat_pais', 'cat_planta.id_cat_pais')
                     ->where('cat_planta.id_cat_pais', $req->id_cat_pais)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 if ($numOrders > 0) {

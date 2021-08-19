@@ -194,18 +194,18 @@ class catTarasController extends Controller
                 $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
                     ->where('entrega_detalle_tinta.id_cat_tara', $req->id_cat_tara)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
                 //count num return orders that doesn't closed
                 $numOrdersReturn = orderWork::leftJoin('devolucion', 'devolucion.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->leftJoin('devolucion_detalle_tinta', 'devolucion_detalle_tinta.id_devolucion', 'devolucion.id_devolucion')
                     ->where('devolucion_detalle_tinta.id_cat_tara', $req->id_cat_tara)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
                 //count num ink detail orders that doesn't closed
                 $numOrdersInkdetail = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
                     ->where('ot_detalle_tinta.id_cat_tara', $req->id_cat_tara)
-                    ->whereIN('orden_trabajo.id_cat_estatus_ot', [1, 2, 3, 5])
+                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 if ($numOrderDeliveries > 0 || $numOrdersReturn > 0  || $numOrdersInkdetail > 0) {

@@ -328,7 +328,7 @@ class userActionsController extends Controller
         try {
             //validation orderwork 
             $numOrders = orderWork::where('id_operador_responsable', $req->id_dato_usuario)
-                ->whereIN('id_cat_estatus_ot', [1, 2, 3, 5])
+                ->whereNotIn('id_cat_estatus_ot', [4, 6])
                 ->count();
 
 

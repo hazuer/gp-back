@@ -176,6 +176,8 @@ return [
         App\Providers\RouteServiceProvider::class,
         //mail smpt database
         App\Providers\MailConfigServiceProvider::class,
+        //excel
+        Maatwebsite\Excel\ExcelServiceProvider::class,
 
     ],
 
@@ -228,6 +230,7 @@ return [
         'URL' => Illuminate\Support\Facades\URL::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
 
     ],
 
