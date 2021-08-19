@@ -29,13 +29,6 @@ class inkImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
      */
     public function model(array $row)
     {
-        //valid if codigo gp exist 
-        if (catInks::where('codigo_gp', $row['codigo_gp'])
-            ->where('id_cat_planta', $this->plant)
-            ->exists()
-        ) {
-            return null;
-        }
         //insert
         return new catInks([
             'nombre_tinta' => $row['nombre_tinta'],
@@ -53,7 +46,18 @@ class inkImport implements ToModel, WithHeadingRow, WithValidation, SkipsOnError
         return [
             '*.nombre_tinta' => ['required', 'max:75'],
             '*.codigo_sap' => ['required', 'max:25'],
-            '*.codigo_gp' => ['required', 'max:25'],
+            '*.codigo_gp' => [
+                'required', 'max:25',
+                function ($attribute, $value, $onFailure) {
+                    //valid if codigo gp exist 
+                    if (catInks::where('codigo_gp', $value)
+                        ->where('id_cat_planta', $this->plant)
+                        ->exists()
+                    ) {
+                        $onFailure('El codigo_gp ' . $value . ' esta repetido en el documento o ya esta resgitrado para esta planta.');
+                    }
+                }
+            ],
         ];
     }
 }
