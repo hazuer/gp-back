@@ -116,7 +116,6 @@ return [
     'uploaded' => 'Error al subir :attribute.',
     'url' => 'El formato de :attribute es inválido.',
     'uuid' => 'El campo :attribute debe ser un UUID válido.',
-    "There was an error on row :row. :message" => "Hubo un error en la fila :row. :message",
 
 
     /*

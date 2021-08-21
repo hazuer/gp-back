@@ -21,8 +21,8 @@ class accessAdminSupervisor
 
             return response()->json([
                 'result' => false,
-                'message' => "No tienes permisos"
-            ], 500);
+                'message' => "Esta acción no está autorizada"
+            ], 401);
         }
     }
 }
