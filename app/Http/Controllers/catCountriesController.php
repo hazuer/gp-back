@@ -144,6 +144,10 @@ class catCountriesController extends Controller
     {
 
         try {
+            //variables user register, date
+            $userId = auth()->user()->id_dato_usuario;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
+
 
             //validation if country will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
@@ -166,11 +170,11 @@ class catCountriesController extends Controller
             $updateCountrystatus->id_cat_estatus = $req->id_cat_estatus;
             //validation if country will be delete
             if ($req->id_cat_estatus == 3) {
-                $updateCountrystatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
-                $updateCountrystatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCountrystatus->id_usuario_elimina = $userId;
+                $updateCountrystatus->fecha_eliminacion = $dateNow;
             } else {
-                $updateCountrystatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
-                $updateCountrystatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCountrystatus->id_usuario_modifica = $userId;
+                $updateCountrystatus->fecha_modificacion = $dateNow;
             }
 
             if ($updateCountrystatus->save()) {

@@ -57,7 +57,6 @@ class userActionsController extends Controller
         }
     }
 
-
     //function user list
     public function userList(Request $req)
     {
@@ -130,7 +129,7 @@ class userActionsController extends Controller
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -146,17 +145,17 @@ class userActionsController extends Controller
                 case 'apellido_marterno':
                     $sortField = "datos_usuario.apellido_marterno";
                     break;
-                case 'id_cat_estatus':
-                    $sortField = "usuario.id_cat_estatus";
+                case 'estatus':
+                    $sortField = "cat_estatus.estatus";
                     break;
-                case 'id_cat_perfil':
-                    $sortField = "usuario.id_cat_perfil";
+                case 'perfil':
+                    $sortField = "cat_perfil.perfil";
                     break;
-                case 'id_cat_planta':
-                    $sortField = "usuario.id_cat_planta";
+                case 'nombre_planta':
+                    $sortField = "cat_planta.nombre_planta";
                     break;
-                case 'id_cat_cliente':
-                    $sortField = "usuario.id_cat_planta";
+                case 'nombre_cliente':
+                    $sortField = "cat_cliente.nombre_cliente";
                     break;
             }
 

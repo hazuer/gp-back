@@ -12,7 +12,6 @@ use App\Http\Requests\importInkCsvRequest;
 use App\Imports\inkImport;
 use Illuminate\Support\Str;
 use Carbon\Carbon;
-use Maatwebsite\Excel\Facades\Excel;
 
 class catInksControllers extends Controller
 {
@@ -58,7 +57,7 @@ class catInksControllers extends Controller
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -74,11 +73,11 @@ class catInksControllers extends Controller
                 case 'codigo_gp':
                     $sortField = "cat_tinta.codigo_gp";
                     break;
-                case 'id_cat_planta':
-                    $sortField = "cat_tinta.id_cat_planta";
+                case 'nombre_planta':
+                    $sortField = "cat_planta.nombre_planta";
                     break;
-                case 'id_cat_estatus':
-                    $sortField = "cat_tinta.id_cat_estatus";
+                case 'estatus':
+                    $sortField = "cat_estatus.estatus";
                     break;
             }
             //order list
@@ -193,6 +192,10 @@ class catInksControllers extends Controller
     public function activeDeactiveDeleteInk(ActiveDeactiveDeleteInkRequest $req)
     {
         try {
+
+            //variables user register, date
+            $userId = auth()->user()->id_dato_usuario;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
             //validation if ink will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
 
@@ -235,11 +238,11 @@ class catInksControllers extends Controller
             $updateInktatus->id_cat_estatus = $req->id_cat_estatus;
             //validation if ink will be delete
             if ($req->id_cat_estatus == 3) {
-                $updateInktatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
-                $updateInktatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateInktatus->id_usuario_elimina =  $userId;
+                $updateInktatus->fecha_eliminacion = $dateNow;
             } else {
-                $updateInktatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
-                $updateInktatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateInktatus->id_usuario_modifica =  $userId;
+                $updateInktatus->fecha_modificacion = $dateNow;
             }
 
             if ($updateInktatus->save()) {

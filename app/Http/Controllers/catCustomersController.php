@@ -45,7 +45,7 @@ class catCustomersController extends Controller
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -55,11 +55,11 @@ class catCustomersController extends Controller
                 case 'nombre_cliente':
                     $sortField = "cat_cliente.nombre_cliente";
                     break;
-                case 'id_cat_planta':
-                    $sortField = "cat_cliente.id_cat_planta";
+                case 'nombre_planta':
+                    $sortField = "cat_planta.nombre_planta";
                     break;
-                case 'id_cat_estatus':
-                    $sortField = "cat_cliente.id_cat_estatus";
+                case 'estatus':
+                    $sortField = "cat_estatus.estatus";
                     break;
             }
             //order list
@@ -175,6 +175,12 @@ class catCustomersController extends Controller
     public function activeDeactiveDeleteCustomer(ActiveDeactiveDeleteCustomerRequest $req)
     {
         try {
+
+
+            //variables user register, date
+            $userId = auth()->user()->id_dato_usuario;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
+
             //validation if customer will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
                 //count num orders deliveries that doesn't closed
@@ -201,11 +207,11 @@ class catCustomersController extends Controller
             $updateCustomerstatus->id_cat_estatus = $req->id_cat_estatus;
             //validation if customer will be delete
             if ($req->id_cat_estatus == 3) {
-                $updateCustomerstatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
-                $updateCustomerstatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCustomerstatus->id_usuario_elimina =  $userId;
+                $updateCustomerstatus->fecha_eliminacion =   $dateNow;
             } else {
-                $updateCustomerstatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
-                $updateCustomerstatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
+                $updateCustomerstatus->id_usuario_modifica =  $userId;
+                $updateCustomerstatus->fecha_modificacion =   $dateNow;
             }
 
             if ($updateCustomerstatus->save()) {

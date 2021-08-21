@@ -52,7 +52,7 @@ class catMachinesController extends Controller
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -65,11 +65,11 @@ class catMachinesController extends Controller
                 case 'modelo':
                     $sortField = "cat_maquina.modelo";
                     break;
-                case 'id_cat_planta':
-                    $sortField = "cat_maquina.id_cat_planta";
+                case 'nombre_planta':
+                    $sortField = "cat_planta.nombre_planta";
                     break;
-                case 'id_cat_estatus':
-                    $sortField = "cat_maquina.id_cat_estatus";
+                case 'estatus':
+                    $sortField = "cat_estatus.estatus";
                     break;
             }
             //order list

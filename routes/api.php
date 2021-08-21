@@ -117,6 +117,24 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::post('catalogo/editar-tintas', 'catInksControllers@updateInk');
     //active deactive and delete Ink
     Route::post('catalogo/editar-estatus-tintas', 'catInksControllers@activeDeactiveDeleteInk');
-    //import ink csc
+    //import ink csv
     Route::post('catalogo/importar-tintas-csv', 'catInksControllers@importInkCSV');
+
+
+    //list Designs Catalog
+    Route::get('catalogo/listar-disenos', 'catDesignController@designsList')->middleware('accessAdminSupervisor');
+    //Ink search to designs
+    Route::post('catalogo/buscar-tintas', 'catDesignController@inkSearch');
+    //create design
+    Route::post('catalogo/crear-disenos', 'catDesignController@registerDesign');
+    //import ink csv
+    Route::post('catalogo/importar-disenos-csv', 'catDesignController@importDesignCSV');
+    //one desing data
+    Route::get('catalogo/datos-diseno', 'catDesignController@designData')->middleware('accessAdminSupervisor');
+    //update  desing
+    Route::post('catalogo/editar-disenos', 'catDesignController@updateDesign');
+    //update status inks design
+    Route::post('catalogo/editar-estatus-tinta-diseno', 'catDesignController@updateStatusInksDesign');
+    //active deactive and delete design
+    Route::post('catalogo/editar-estatus-disenos', 'catDesignController@activeDeactiveDeleteDesign');
 });

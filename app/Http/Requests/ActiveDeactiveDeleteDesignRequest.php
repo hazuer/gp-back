@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterDesingRequest extends FormRequest
+class ActiveDeactiveDeleteDesignRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,8 @@ class RegisterDesingRequest extends FormRequest
      */
     public function authorize()
     {
-        //if user is admin or supervisor
-        if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 4) {
+        //if user is admin
+        if (auth()->user()->id_cat_perfil == 1) {
             return true;
         } else {
 
@@ -30,10 +30,8 @@ class RegisterDesingRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_diseno' => 'required|unique:usuario,correo|max:75',
-            'descripcion' => 'nullable',
-            'id_cat_planta' => 'required',
-
+            'id_cat_diseno' => 'required',
+            'id_cat_estatus'  => 'required'
         ];
     }
 }
