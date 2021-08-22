@@ -7,6 +7,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\QueryException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Illuminate\Validation\ValidationException as ValidationValidationException;
 use Maatwebsite\Excel\Validators\ValidationException;
 use Symfony\Component\HttpFoundation\File\Exception\AccessDeniedException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -80,6 +81,10 @@ class Handler extends ExceptionHandler
 
         if ($exception instanceof AuthorizationException) {
             return response()->json(["result" => false, 'message' => 'Esta acción no está autorizada'], 401);
+        }
+
+        if ($exception instanceof ValidationValidationException) {
+            return response()->json(["result" => false, 'message' => 'Los datos proporcionados no son válidos', 'errors' => $exception->errors()], 422);
         }
 
 
