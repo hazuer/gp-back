@@ -32,10 +32,14 @@ class catCountriesController extends Controller
                 $query->orWhereRaw("cat_pais.nombre_pais  LIKE '%" . $req->nombre_pais . "%'");
             }
 
+            if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
+                $query->orWhere("cat_pais.id_cat_estatus  ", $req->id_cat_estatus);
+            }
+
             //method sort
             $direction  = "ASC";
             //if request has orderBy 
-            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'id_cat_estatus';
+            $sortField = $req->has('ordenarPor') && !is_null($req->ordenarPor) ? $req->ordenarPor : 'estatus';
 
             if (Str::of($sortField)->startsWith('-')) {
                 $direction  = "DESC";
@@ -45,8 +49,8 @@ class catCountriesController extends Controller
                 case 'nombre_pais':
                     $sortField = "cat_pais.nombre_pais";
                     break;
-                case 'id_cat_estatus':
-                    $sortField = "cat_pais.id_cat_estatus";
+                case 'estatus':
+                    $sortField = "cat_estatus.estatus";
                     break;
             }
 
