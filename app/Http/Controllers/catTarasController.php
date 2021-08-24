@@ -39,7 +39,7 @@ class catTarasController extends Controller
 
             //if search has capacidad 
             if ($req->has('capacidad') && !is_null($req->capacidad)) {
-                $query->orWhere('cat_tara.capacidad', $req->capacidad);
+                $query->orWhereRaw("cat_tara.capacidad  LIKE '%" . $req->capacidad . "%'");
             }
 
             //if search contain country
