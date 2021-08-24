@@ -46,7 +46,7 @@ class catMachinesController extends Controller
 
             //if search contain status
             if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
-                $query->orWhere('cat_maquina.id_cat_estatus', '=', $req->id_cat_estatus);
+                $query->Where('cat_maquina.id_cat_estatus', '=', $req->id_cat_estatus);
             }
 
             //method sort

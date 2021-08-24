@@ -33,7 +33,7 @@ class catCountriesController extends Controller
             }
 
             if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
-                $query->orWhere("cat_pais.id_cat_estatus  ", $req->id_cat_estatus);
+                $query->Where("cat_pais.id_cat_estatus  ", $req->id_cat_estatus);
             }
 
             //method sort

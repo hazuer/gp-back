@@ -94,14 +94,13 @@ class userActionsController extends Controller
             if ($req->has('apellido_materno')  && !is_null($req->pellido_materno)) {
                 $query->orWhereRaw("datos_usuario.apellido_materno  LIKE '%" . $req->pellido_materno . "%'");
             }
-            //if search contain status
-            if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
-                $query->orWhere('usuario.id_cat_estatus', '=', $req->id_cat_estatus);
-            }
             //if search contain profile type
-
             if ($req->has('id_cat_perfil') && !is_null($req->id_cat_perfil)) {
                 $query->orWhere('usuario.id_cat_perfil', '=', $req->id_cat_perfil);
+            }
+            //if search contain status
+            if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
+                $query->Where('usuario.id_cat_estatus', '=', $req->id_cat_estatus);
             }
 
             //valid  type perfil
