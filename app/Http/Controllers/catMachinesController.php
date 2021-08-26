@@ -26,7 +26,9 @@ class catMachinesController extends Controller
                     'cat_maquina.nombre_maquina',
                     'cat_maquina.modelo',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_maquina.id_cat_estatus',
+                    'cat_maquina.id_cat_planta'
                 );
 
             //if search contain machine name

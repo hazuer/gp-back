@@ -26,7 +26,10 @@ class catPlantsController extends Controller
                     'cat_planta.id_cat_planta',
                     'cat_planta.nombre_planta',
                     'cat_pais.nombre_pais',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_planta.id_cat_pais',
+                    'cat_planta.id_cat_estatus'
+
                 );
 
             //if search contain plant name

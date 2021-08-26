@@ -25,7 +25,10 @@ class catReasonsController extends Controller
                     'cat_razon.id_cat_razon',
                     'cat_razon.razon',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_razon.id_cat_estatus',
+                    'cat_razon.id_cat_planta'
+
                 );
 
             //if search has reazon

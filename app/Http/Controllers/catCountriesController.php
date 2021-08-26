@@ -24,7 +24,8 @@ class catCountriesController extends Controller
                 ->select(
                     'cat_pais.id_cat_pais',
                     'cat_pais.nombre_pais',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_pais.id_cat_estatus'
                 );
 
             //if search has nombre

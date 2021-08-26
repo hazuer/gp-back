@@ -25,7 +25,10 @@ class catCustomersController extends Controller
                     'cat_cliente.id_cat_cliente',
                     'cat_cliente.nombre_cliente',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_cliente.id_cat_estatus',
+                    'cat_cliente.id_cat_planta'
+
                 );
 
             //if search has reazon

@@ -39,7 +39,10 @@ class catDesignController extends Controller
                     'cat_diseno.nombre_diseno',
                     'cat_diseno.descripcion',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_diseno.id_cat_estatus',
+                    'cat_diseno.id_cat_planta'
+
                 )->distinct();
 
 
@@ -123,7 +126,9 @@ class catDesignController extends Controller
                     'descripcion' => $design->descripcion,
                     'tintas' => $inks, //all inks of design
                     'nombre_planta' => $design->nombre_planta,
-                    'estatus' => $design->estatus
+                    'estatus' => $design->estatus,
+                    'id_cat_estatus' => $design->id_cat_estatus,
+                    'id_cat_planta' => $design->id_cat_planta
                 ));
             }
 

@@ -29,7 +29,9 @@ class catTarasController extends Controller
                     'cat_tara.nombre_tara',
                     'cat_tara.capacidad',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_tara.id_cat_estatus',
+                    'cat_tara.id_cat_planta'
                 );
 
             //if search has tara name

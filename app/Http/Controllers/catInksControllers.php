@@ -29,7 +29,10 @@ class catInksControllers extends Controller
                     'cat_tinta.codigo_cliente',
                     'cat_tinta.codigo_gp',
                     'cat_planta.nombre_planta',
-                    'cat_estatus.estatus'
+                    'cat_estatus.estatus',
+                    'cat_tinta.id_cat_estatus',
+                    'cat_tinta.id_cat_planta'
+
                 );
             //if search has ink name
             if ($req->has('nombre_tinta') && !is_null($req->nombre_tinta)) {
