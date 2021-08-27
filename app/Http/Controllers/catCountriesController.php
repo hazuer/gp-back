@@ -166,7 +166,7 @@ class catCountriesController extends Controller
                 if ($numOrders > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "La planta no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El Pais no puede ser desactivado o eliminado, aun tiene ordenes de trabajo sin terminar"
                     ], 201);
                 }
             }
