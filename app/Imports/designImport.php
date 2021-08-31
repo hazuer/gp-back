@@ -84,11 +84,18 @@ class designImport implements ToCollection, WithHeadingRow, WithValidation, Skip
                 function ($attribute, $value, $onFailure) {
                     $codigos_gp = explode(',', $value);
                     foreach ($codigos_gp as $codigo_gp) {
-                        if (catInks::where('codigo_gp', $codigo_gp)
+                        //get ink
+                        $foundInk = catInks::where('codigo_gp', $codigo_gp)
                             ->where('id_cat_planta', $this->plant)
-                            ->doesntExist()
-                        ) {
-                            $onFailure('El codigo_gp ' . $codigo_gp . ' no existe para esta planta, intenta nuevamente.');
+                            ->first();
+                        //if not exists
+                        if (!$foundInk) {
+                            $onFailure('La tinta con el codigo_gp ' . $codigo_gp . ' no existe para esta planta, intenta nuevamente.');
+                        }
+
+                        //if ink is an additive
+                        if ($foundInk && $foundInk->aditivo == 1) {
+                            $onFailure('La tinta con el codigo_gp ' . $codigo_gp . ' es un aditivo no puede ser parte del diseño.');
                         }
                     }
                 }

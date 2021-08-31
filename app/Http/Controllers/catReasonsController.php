@@ -186,9 +186,8 @@ class catReasonsController extends Controller
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
 
                 //count num orders deliveries that doesn't closed
-                $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
-                    ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
-                    ->where('entrega_detalle_tinta.id_cat_razon', $req->id_cat_razon)
+                $numOrderDeliveries = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                    ->where('ot_detalle_tinta.id_cat_razon', $req->id_cat_razon)
                     ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 

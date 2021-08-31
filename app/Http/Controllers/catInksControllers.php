@@ -28,6 +28,7 @@ class catInksControllers extends Controller
                     'cat_tinta.nombre_tinta',
                     'cat_tinta.codigo_cliente',
                     'cat_tinta.codigo_gp',
+                    'cat_tinta.aditivo',
                     'cat_planta.nombre_planta',
                     'cat_estatus.estatus',
                     'cat_tinta.id_cat_estatus',
@@ -54,8 +55,14 @@ class catInksControllers extends Controller
             }
             //if search contain status
             if ($req->has('id_cat_estatus') && !is_null($req->id_cat_estatus)) {
-                $query->Where('cat_tinta.id_cat_estatus', '=', $req->id_cat_estatus);
+                $query->where('cat_tinta.id_cat_estatus', '=', $req->id_cat_estatus);
             }
+
+            //if search aditivo status
+            if ($req->has('aditivo') && !is_null($req->aditivo)) {
+                $query->where('cat_tinta.aditivo', '=', $req->aditivo);
+            }
+
 
             //method sort
             $direction  = "ASC";
@@ -121,6 +128,9 @@ class catInksControllers extends Controller
                     'message' => "ya existe un Codigo GP con esta descripcion asignado a esta planta."
                 ], 401);
             }
+
+            //valid aditivo
+            $aditivo = $req->has('aditivo') && $req->aditivo == true ? 1 : 0;
             //register ink
             $newInk = new  catInks;
             $newInk->nombre_tinta = $req->nombre_tinta;
@@ -128,6 +138,7 @@ class catInksControllers extends Controller
             $newInk->codigo_gp = $req->codigo_gp;
             $newInk->id_cat_planta = $req->id_cat_planta;
             $newInk->id_cat_estatus = 1;
+            $newInk->aditivo = $aditivo;
             $newInk->id_usuario_crea = auth()->user()->id_dato_usuario;
             $newInk->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newInk->save()) {
@@ -165,11 +176,14 @@ class catInksControllers extends Controller
                     'message' => "ya existe un Codigo GP con esta descripcion asignado a esta planta."
                 ], 401);
             }
+            //valid aditivo
+            $aditivo = $req->has('aditivo') && $req->aditivo == true ? 1 : 0;
             //update ink
             $updateInk = catInks::find($req->id_cat_tinta);
             $updateInk->nombre_tinta = $req->nombre_tinta;
             $updateInk->codigo_cliente = $req->codigo_cliente;
             $updateInk->codigo_gp = $req->codigo_gp;
+            $updateInk->aditivo = $aditivo;
             $updateInk->id_usuario_modifica = auth()->user()->id_dato_usuario;
             $updateInk->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateInk->save()) {
@@ -208,10 +222,9 @@ class catInksControllers extends Controller
                     ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
-                //count num deliveries orders that doesn't closed
-                $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
-                    ->leftJoin('entrega_detalle_tinta', 'entrega_detalle_tinta.id_entrega', 'entrega.id_entrega')
-                    ->where('entrega_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
+                //count num orders deliveries that doesn't closed
+                $numOrderDeliveries = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                    ->where('ot_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
                     ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
@@ -222,13 +235,7 @@ class catInksControllers extends Controller
                     ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
                     ->count();
 
-                //count num ot ink detail orders that doesn't closed
-                $numOrdersInkdetail = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
-                    ->where('ot_detalle_tinta.id_cat_tinta', $req->id_cat_tinta)
-                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
-                    ->count();
-
-                if ($numOrderDesign > 0 || $numOrderDeliveries > 0 || $numOrdersReturn > 0 || $numOrdersInkdetail > 0) {
+                if ($numOrderDesign > 0  || $numOrdersReturn > 0 || $numOrderDeliveries > 0) {
                     return response()->json([
                         'result' => false,
                         'message' => "La Tinta no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"

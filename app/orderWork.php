@@ -21,9 +21,10 @@ class orderWork extends Model
      *
      * @var array
      */
+
     protected $fillable = [
-        'id_orden_trabajo',
         'orden_fabricacion',
+        'orden_trabajo_of',
         'id_cat_maquina',
         'id_cat_diseno',
         'cantidad_programado',
@@ -34,9 +35,14 @@ class orderWork extends Model
         'id_operador_responsable',
         'id_cat_estatus_ot',
         'fecha_cierre_orden',
-        'id_cat_planta',
         'codigo_QR',
-        'id_cat_estatus_ot',
+        'adiciones',
+        'orden_cobrada',
+        'fecha_cobro',
+        'folio_entrega',
+        'fecha_entrega',
+        'peso_entrega_total',
+        'id_cliente_autoriza',
         'id_usuario_crea',
         'fecha_creacion',
         'id_usuario_modifica',

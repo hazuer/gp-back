@@ -21,6 +21,7 @@ class catInks extends Model
         'nombre_tinta',
         'codigo_cliente',
         'codigo_gp',
+        'aditivo',
         'id_cat_planta',
         'id_cat_estatus',
         'id_usuario_crea',

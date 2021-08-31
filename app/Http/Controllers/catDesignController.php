@@ -156,6 +156,7 @@ class catDesignController extends Controller
             $searchResult = catInks::where('id_cat_estatus', 1)
                 ->select('id_cat_tinta', 'nombre_tinta', 'codigo_cliente', 'codigo_gp')
                 ->where('id_cat_planta', $req->id_cat_planta)
+                ->where('aditivo', 0)
                 ->whereRaw("nombre_tinta LIKE '%" . $req->nombre_tinta . "%'")
                 ->get();
 

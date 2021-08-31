@@ -187,9 +187,8 @@ class catCustomersController extends Controller
             //validation if customer will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
                 //count num orders deliveries that doesn't closed
-                $numOrderDeliveries = orderWork::leftJoin('entrega', 'entrega.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
-                    ->where('entrega.id_cliente_autoriza', $req->id_cat_cliente)
-                    ->whereNotIn('orden_trabajo.id_cat_estatus_ot', [4, 6])
+                $numOrderDeliveries = orderWork::where('id_cliente_autoriza', $req->id_cat_cliente)
+                    ->whereNotIn('id_cat_estatus_ot', [4, 6])
                     ->count();
 
                 //count num orders return that doesn't closed
