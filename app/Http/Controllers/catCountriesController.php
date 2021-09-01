@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\catCountries;
-use App\orderWork;
-use App\Http\Requests\RegisterCountryRequest;
-use App\Http\Requests\UpdateCountryRequest;
-use App\Http\Requests\ActiveDeactiveDeleteCountryRequest;
+use App\Models\catCountries;
+use App\Models\orderWork;
+
+use App\Http\Requests\Countries\RegisterCountryRequest;
+use App\Http\Requests\Countries\UpdateCountryRequest;
+use App\Http\Requests\Countries\ActiveDeactiveDeleteCountryRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 

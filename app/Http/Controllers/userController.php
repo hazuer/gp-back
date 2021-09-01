@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 
-use App\User;
-use App\catPlants;
-use App\catCustomers;
-use App\userData;
-use App\Http\Requests\RegisterRequest;
-use App\Http\Requests\LoginRequest;
-use App\Http\Requests\ForgotRequest;
+use App\Models\User;
+use App\Models\catPlants;
+use App\Models\catCustomers;
+use App\Models\userData;
+use App\Http\Requests\Users\RegisterRequest;
+use App\Http\Requests\Users\LoginRequest;
+use App\Http\Requests\Users\ForgotRequest;
 use App\Mail\resetPassword;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Controllers\ComunFunctionsController;

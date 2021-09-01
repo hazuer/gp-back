@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\catReasons;
-use App\orderWork;
+use App\Models\catReasons;
+use App\Models\orderWork;
+
 use Illuminate\Http\Request;
-use App\Http\Requests\RegisterReasonRequest;
-use App\Http\Requests\UpdateReasonRequest;
-use App\Http\Requests\ActiveDeactiveDeleteReasonRequest;
+
+use App\Http\Requests\Reasons\RegisterReasonRequest;
+use App\Http\Requests\Reasons\UpdateReasonRequest;
+use App\Http\Requests\Reasons\ActiveDeactiveDeleteReasonRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\orderWork;
-use App\catMachines;
-use App\Http\Requests\RegisterMachineRequest;
-use App\Http\Requests\UpdateMachineRequest;
-use App\Http\Requests\ActiveDeactiveDeleteMachineRequest;
+use App\Models\orderWork;
+use App\Models\catMachines;
+
+use App\Http\Requests\Machines\RegisterMachineRequest;
+use App\Http\Requests\Machines\UpdateMachineRequest;
+use App\Http\Requests\Machines\ActiveDeactiveDeleteMachineRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 
@@ -41,7 +43,7 @@ class catMachinesController extends Controller
                 $query->orWhereRaw("cat_maquina.modelo  LIKE '%" . $req->modelo . "%'");
             }
 
-            //if search contain country
+            //if search contain plant
             if ($req->has('id_cat_planta') && !is_null($req->id_cat_planta)) {
                 $query->orWhere('cat_maquina.id_cat_planta', '=', $req->id_cat_planta);
             }

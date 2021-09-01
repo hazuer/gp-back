@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\catPlants;
-use App\catStatus;
-use App\catCountries;
+use App\Models\catPlants;
+use App\Models\catStatus;
+use App\Models\catCountries;
 
 class ComunFunctionsController extends Controller
 {

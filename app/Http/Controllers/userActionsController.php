@@ -3,19 +3,22 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
-use App\userData;
-use App\catCustomers;
-use App\catPlants;
-use App\catProfiles;
-use App\catStatus;
-use App\orderWork;
+use App\Models\User;
+use App\Models\userData;
+use App\Models\catCustomers;
+use App\Models\catPlants;
+use App\Models\catProfiles;
+use App\Models\catStatus;
+use App\Models\orderWork;
+
 use App\Mail\resetPassword;
 use App\Http\Controllers\ComunFunctionsController;
-use App\Http\Requests\AuthorizerRequest;
-use App\Http\Requests\UpdateUserRequest;
-use App\Http\Requests\UserDeactivateRequest;
-use App\Http\Requests\UserPermissionRequest;
+
+use App\Http\Requests\Users\AuthorizerRequest;
+use App\Http\Requests\Users\UpdateUserRequest;
+use App\Http\Requests\Users\UserDeactivateRequest;
+use App\Http\Requests\Users\UserPermissionRequest;
+
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Str;

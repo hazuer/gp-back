@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\orderWork;
-use App\catCustomers;
-use App\Http\Requests\RegisterCustomerRequest;
-use App\Http\Requests\UpdateCustomerRequest;
-use App\Http\Requests\ActiveDeactiveDeleteCustomerRequest;
+use App\Models\orderWork;
+use App\Models\catCustomers;
+
+use App\Http\Requests\Customers\RegisterCustomerRequest;
+use App\Http\Requests\Customers\UpdateCustomerRequest;
+use App\Http\Requests\Customers\ActiveDeactiveDeleteCustomerRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 

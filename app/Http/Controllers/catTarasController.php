@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\orderWork;
-use App\catTaras;
-use App\Http\Requests\RegisterTaraRequest;
-use App\Http\Requests\UpdateTaraRequest;
-use App\Http\Requests\ActiveDeactiveDeleteTaraRequest;
+use App\Models\orderWork;
+use App\Models\catTaras;
+
+use App\Http\Requests\Taras\RegisterTaraRequest;
+use App\Http\Requests\Taras\UpdateTaraRequest;
+use App\Http\Requests\Taras\ActiveDeactiveDeleteTaraRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 

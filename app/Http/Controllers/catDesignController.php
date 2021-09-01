@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\orderWork;
-use App\catInks;
-use App\catDesign;
-use App\catDesignInks;
+use App\Models\orderWork;
+use App\Models\catInks;
+use App\Models\catDesign;
+use App\Models\catDesignInks;
 
-use App\Http\Requests\inkSearchRequest;
-use App\Http\Requests\ActiveDeactiveDeleteDesignRequest;
-use App\Http\Requests\RegisterDesignRequest;
-use App\Http\Requests\importDesignRequest;
-use App\Http\Requests\UpdateStatusInksDesignRequest;
-use App\Http\Requests\UpdateDesignRequest;
+use App\Http\Requests\Desings\inkSearchRequest;
+use App\Http\Requests\Desings\ActiveDeactiveDeleteDesignRequest;
+use App\Http\Requests\Desings\RegisterDesignRequest;
+use App\Http\Requests\Desings\importDesignRequest;
+use App\Http\Requests\Desings\UpdateStatusInksDesignRequest;
+use App\Http\Requests\Desings\UpdateDesignRequest;
+
 use App\Imports\designImport;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\DB;

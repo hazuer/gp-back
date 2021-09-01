@@ -2,7 +2,7 @@
 
 namespace App\Imports;
 
-use App\catInks;
+use App\Models\catInks;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
 use Maatwebsite\Excel\Concerns\SkipsOnError;

@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\catPlants;
-use App\orderWork;
-use App\Http\Requests\RegisterPlantRequest;
-use App\Http\Requests\UpdatePlantRequest;
-use App\Http\Requests\ActiveDeactiveDeletePlantRequest;
+use App\Models\catPlants;
+use App\Models\orderWork;
+
+use App\Http\Requests\Plants\RegisterPlantRequest;
+use App\Http\Requests\Plants\UpdatePlantRequest;
+use App\Http\Requests\Plants\ActiveDeactiveDeletePlantRequest;
+
 use Illuminate\Support\Str;
 use Carbon\Carbon;
 

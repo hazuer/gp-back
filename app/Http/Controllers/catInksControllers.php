@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\orderWork;
-use App\catInks;
-use App\Http\Requests\RegisterInkRequest;
-use App\Http\Requests\UpdateInkRequest;
-use App\Http\Requests\ActiveDeactiveDeleteInkRequest;
-use App\Http\Requests\importInkCsvRequest;
+use App\Models\orderWork;
+use App\Models\catInks;
+
+use App\Http\Requests\Inks\RegisterInkRequest;
+use App\Http\Requests\Inks\UpdateInkRequest;
+use App\Http\Requests\Inks\ActiveDeactiveDeleteInkRequest;
+use App\Http\Requests\Inks\importInkCsvRequest;
+
 use App\Imports\inkImport;
 use Illuminate\Support\Str;
 use Carbon\Carbon;

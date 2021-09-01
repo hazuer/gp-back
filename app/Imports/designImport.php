@@ -2,9 +2,9 @@
 
 namespace App\Imports;
 
-use App\catInks;
-use App\catDesign;
-use App\catDesignInks;
+use App\Models\catInks;
+use App\Models\catDesign;
+use App\Models\catDesignInks;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\Importable;
 use Maatwebsite\Excel\Concerns\SkipsErrors;
