@@ -240,7 +240,7 @@ class catInksControllers extends Controller
                 if ($numOrderDesign > 0  || $numOrdersReturn > 0 || $numOrderDeliveries > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "La Tinta no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "La Tinta no puede ser desactivada o eliminada, aun tiene ordenes de entrega sin terminar"
                     ], 201);
                 }
             }

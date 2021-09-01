@@ -31,7 +31,7 @@ class UpdateCountryRequest extends FormRequest
     {
         return [
             'id_cat_pais' => 'required',
-            'nombre_pais' => 'required|max:75|unique:cat_pais,nombre_pais,' . request('id_cat_pais') . ',id_cat_pais'
+            'nombre_pais' => 'required|max:75'
 
         ];
     }

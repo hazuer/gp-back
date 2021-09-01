@@ -30,7 +30,7 @@ class RegisterCountryRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_pais' => 'required|unique:cat_pais,nombre_pais|max:50',
+            'nombre_pais' => 'required|max:50',
         ];
     }
 }

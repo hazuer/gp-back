@@ -205,7 +205,7 @@ class catReasonsController extends Controller
                 if ($numOrderDeliveries > 0 ||  $numOrdersReturn > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "La razon no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "La razon no puede ser desactivada o eliminada, aun tiene ordenes de entrega sin terminar"
                     ], 201);
                 }
             }

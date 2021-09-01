@@ -88,6 +88,14 @@ class catCountriesController extends Controller
     {
         try {
 
+            //valid if name exists
+            if (catCountries::where('nombre_país', $req->nombre_pais)->exists()) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "El nombre de pais ya existe"
+                ], 422);
+            }
+
             $newCountry = new catCountries;
             $newCountry->nombre_pais = $req->nombre_pais;
             $newCountry->id_cat_estatus = 1;
@@ -119,6 +127,17 @@ class catCountriesController extends Controller
     {
         try {
 
+            //valid if name exists
+            if (catCountries::where('nombre_pais', $req->nombre_pais)
+                ->where('id_cat_pais', '<>', $req->id_cat_pais)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "El nombre de país ya existe"
+                ], 422);
+            }
+            //update country
             $updateCountry = catCountries::find($req->id_cat_pais);
             $updateCountry->nombre_pais = $req->nombre_pais;
             $updateCountry->id_usuario_modifica = auth()->user()->id_dato_usuario;
@@ -168,7 +187,7 @@ class catCountriesController extends Controller
                 if ($numOrders > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "El Pais no puede ser desactivado o eliminado, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El Pais no puede ser desactivado o eliminado, aun tiene ordenes de entrega sin terminar"
                     ], 201);
                 }
             }

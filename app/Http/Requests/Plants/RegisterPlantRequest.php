@@ -30,7 +30,7 @@ class RegisterPlantRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_planta' => 'required|unique:cat_planta,nombre_planta|max:255',
+            'nombre_planta' => 'required|max:255',
             'id_cat_pais' => 'required'
         ];
     }

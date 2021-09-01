@@ -261,7 +261,7 @@ class catDesignController extends Controller
                 if ($numOrders > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "El diseño no puede ser desactivado o eliminado, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El diseño no puede ser desactivado o eliminado, aun tiene ordenes de entrega sin terminar"
                     ], 400);
                 }
             }
@@ -379,7 +379,7 @@ class catDesignController extends Controller
             if ($numOrders > 0) {
                 return response()->json([
                     'result' => false,
-                    'message' => "El diseño no puede ser modificado, aun tiene ordenes de trabajo sin terminar"
+                    'message' => "El diseño no puede ser modificado, aun tiene ordenes de entrega sin terminar"
                 ], 400);
             }
 
@@ -439,7 +439,7 @@ class catDesignController extends Controller
             if ($numOrders > 0) {
                 return response()->json([
                     'result' => false,
-                    'message' => "El diseño no puede ser modificado, aun tiene ordenes de trabajo sin terminar"
+                    'message' => "El diseño no puede ser modificado, aun tiene ordenes de entrega sin terminar"
                 ], 400);
             }
 

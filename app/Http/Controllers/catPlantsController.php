@@ -97,6 +97,16 @@ class catPlantsController extends Controller
     public function registerPlant(RegisterPlantRequest $req)
     {
         try {
+            //valid if name exists
+            if (catPlants::where('nombre_planta', $req->nombre_planta)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "El nombre de planta ya existe"
+                ], 422);
+            }
+            //register plant
             $newPlant = new  catPlants;
             $newPlant->nombre_planta = $req->nombre_planta;
             $newPlant->id_cat_pais = $req->id_cat_pais;
@@ -127,6 +137,17 @@ class catPlantsController extends Controller
     public function updatePlant(UpdatePlantRequest $req)
     {
         try {
+
+            //valid if name exists
+            if (catPlants::where('nombre_planta', $req->nombre_planta)
+                ->where('id_cat_planta', '<>', $req->id_cat_planta)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => false,
+                    'message' => "El nombre de planta ya existe"
+                ], 422);
+            }
 
             $updatePlant = catPlants::find($req->id_cat_planta);
             $updatePlant->nombre_planta = $req->nombre_planta;
@@ -172,7 +193,7 @@ class catPlantsController extends Controller
                 if ($numOrders > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "La planta no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "La planta no puede ser desactivada o eliminada, aun tiene ordenes de entrega sin terminar"
                     ], 201);
                 }
             }

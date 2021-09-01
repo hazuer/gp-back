@@ -202,7 +202,7 @@ class catCustomersController extends Controller
                 if ($numOrderDeliveries > 0 || $numOrdersReturn > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "El cliente no puede ser desactivado o eliminado, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "El cliente no puede ser desactivado o eliminado, aun tiene ordenes entrega sin terminar"
                     ], 201);
                 }
             }

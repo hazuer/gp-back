@@ -336,7 +336,7 @@ class userActionsController extends Controller
             if ($numOrders > 0) {
                 return response()->json([
                     'result' => false,
-                    'message' => "El usuario no puede ser desactivado, aun tiene ordenes de trabajo sin terminar"
+                    'message' => "El usuario no puede ser desactivado, aun tiene ordenes de entrega sin terminar"
                 ], 201);
             }
 

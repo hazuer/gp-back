@@ -31,7 +31,7 @@ class UpdatePlantRequest extends FormRequest
     {
         return [
             'id_cat_planta' => 'required',
-            'nombre_planta' => 'required|max:255|unique:cat_planta,nombre_planta,' . request('id_cat_planta') . ',id_cat_planta',
+            'nombre_planta' => 'required|max:255',
             'id_cat_pais' => 'required'
         ];
     }

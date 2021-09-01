@@ -200,7 +200,7 @@ class catMachinesController extends Controller
                 if ($numOrders > 0) {
                     return response()->json([
                         'result' => false,
-                        'message' => "La maquina no puede ser desactivada o eliminada, aun tiene ordenes de trabajo sin terminar"
+                        'message' => "La maquina no puede ser desactivada o eliminada, aun tiene ordenes de entrega sin terminar"
                     ], 201);
                 }
             }
