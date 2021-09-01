@@ -89,7 +89,7 @@ class catCountriesController extends Controller
         try {
 
             //valid if name exists
-            if (catCountries::where('nombre_país', $req->nombre_pais)->exists()) {
+            if (catCountries::where('nombre_pais', $req->nombre_pais)->exists()) {
                 return response()->json([
                     'result' => false,
                     'message' => "El nombre de pais ya existe"
