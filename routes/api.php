@@ -28,27 +28,27 @@ Route::group(['middleware' => 'auth:api'], function () {
     //close session
     Route::post('cerrar-sesion', 'userController@logOut');
     //users list data
-    Route::get('datos-listar-usuarios', 'userActionsController@dataUsersList')->middleware('accessAdminSupervisor');
+    Route::get('datos-listar-usuarios', 'userActionsController@dataUsersList')->middleware('accessAdmin');
     //users list
-    Route::get('listar-usuarios', 'userActionsController@userList')->middleware('accessAdminSupervisor');
+    Route::get('listar-usuarios', 'userActionsController@userList')->middleware('accessAdmin');
     //user data
-    Route::get('datos-usuario', 'userActionsController@userDataForm')->middleware('accessAdminSupervisor');
+    Route::get('datos-usuario', 'userActionsController@userDataForm')->middleware('accessAdmin');
     //authorizer user
-    Route::post('autorizar-usuarios', 'userActionsController@userAuthtorize')->middleware('accessAdminSupervisor');
+    Route::post('autorizar-usuarios', 'userActionsController@userAuthtorize');
     //update user data
-    Route::post('editar-usuarios-datos', 'userActionsController@updateUserData')->middleware('accessAdminSupervisor');
+    Route::post('editar-usuarios-datos', 'userActionsController@updateUserData');
     //deactivate user 
-    Route::post('desactivar-usuarios', 'userActionsController@userDeactivate')->middleware('accessAdminSupervisor');
+    Route::post('desactivar-usuarios', 'userActionsController@userDeactivate');
     //update user permissions
     //Route::post('editar-usuarios-permisos', 'userActionsController@updateUserPermissions');
 
 
     //data list countries  and status
-    Route::get('catalogo/paises-estatus-listas', 'ComunFunctionsController@countriesStatusList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/paises-estatus-listas', 'ComunFunctionsController@countriesStatusList')->middleware('accessAdmin');
     //list Plants Catalog 
-    Route::get('catalogo/listar-plantas', 'catPlantsController@plantsList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-plantas', 'catPlantsController@plantsList')->middleware('accessAdmin');
     //create plants
-    Route::post('catalogo/crear-plantas', 'catPlantsController@registerPlant')->middleware('accessAdminSupervisor');
+    Route::post('catalogo/crear-plantas', 'catPlantsController@registerPlant');
     //update plant
     Route::post('catalogo/editar-plantas', 'catPlantsController@updatePlant');
     //active deactive and delete plant
@@ -56,11 +56,11 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //data list plants  and status
-    Route::get('catalogo/plantas-estatus-listas', 'ComunFunctionsController@plantsStatusList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/plantas-estatus-listas', 'ComunFunctionsController@plantsStatusList')->middleware('accessAdmin');
     //list Country Catalog
-    Route::get('catalogo/listar-razones', 'catReasonsController@reasonsList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-razones', 'catReasonsController@reasonsList')->middleware('accessAdmin');
     //create Country
-    Route::post('catalogo/crear-razones', 'catReasonsController@registerReason')->middleware('accessAdminSupervisor');
+    Route::post('catalogo/crear-razones', 'catReasonsController@registerReason');
     //update Country
     Route::post('catalogo/editar-razones', 'catReasonsController@updateReason');
     //active deactive and delete Country
@@ -69,7 +69,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Countries Catalog
-    Route::get('catalogo/listar-paises', 'catCountriesController@countryList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-paises', 'catCountriesController@countryList')->middleware('accessAdmin');
     //create Country
     Route::post('catalogo/crear-paises', 'catCountriesController@registerCountry');
     //update Country
@@ -79,7 +79,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Customers Catalog
-    Route::get('catalogo/listar-clientes', 'catCustomersController@customersList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-clientes', 'catCustomersController@customersList')->middleware('accessAdmin');
     //create Customer
     Route::post('catalogo/crear-clientes', 'catCustomersController@registerCustomer');
     //update Customer
@@ -90,7 +90,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Machines Catalog
-    Route::get('catalogo/listar-maquinas', 'catMachinesController@machinesList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-maquinas', 'catMachinesController@machinesList')->middleware('accessAdmin');
     //create Machine
     Route::post('catalogo/crear-maquinas', 'catMachinesController@registerMachine');
     //update Machine
@@ -100,7 +100,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Taras Catalog
-    Route::get('catalogo/listar-taras', 'catTarasController@tarasList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-taras', 'catTarasController@tarasList')->middleware('accessAdmin');
     //create Tara
     Route::post('catalogo/crear-taras', 'catTarasController@registerTara');
     //update Tara
@@ -110,7 +110,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Inks Catalog
-    Route::get('catalogo/listar-tintas', 'catInksControllers@inksList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-tintas', 'catInksControllers@inksList')->middleware('accessAdmin');
     //create Ink
     Route::post('catalogo/crear-tintas', 'catInksControllers@registerInk');
     //update Ink
@@ -122,7 +122,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //list Designs Catalog
-    Route::get('catalogo/listar-disenos', 'catDesignController@designsList')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/listar-disenos', 'catDesignController@designsList')->middleware('accessAdmin');
     //Ink search to designs
     Route::post('catalogo/buscar-tintas', 'catDesignController@inkSearch');
     //create design
@@ -130,11 +130,18 @@ Route::group(['middleware' => 'auth:api'], function () {
     //import ink csv
     Route::post('catalogo/importar-disenos-csv', 'catDesignController@importDesignCSV');
     //one desing data
-    Route::get('catalogo/datos-diseno', 'catDesignController@designData')->middleware('accessAdminSupervisor');
+    Route::get('catalogo/datos-diseno', 'catDesignController@designData')->middleware('accessAdmin');
     //update  desing
     Route::post('catalogo/editar-disenos', 'catDesignController@updateDesign');
     //update status inks design
     Route::post('catalogo/editar-estatus-tinta-diseno', 'catDesignController@updateStatusInksDesign');
     //active deactive and delete design
     Route::post('catalogo/editar-estatus-disenos', 'catDesignController@activeDeactiveDeleteDesign');
+
+
+    //administration
+    //get system params
+    Route::get('administracion/parametrizar-sistema', 'systemAdministrationController@getSystemParams')->middleware('accessAdmin');
+    //system params register and update
+    Route::post('administracion/parametrizar-sistema-crear-editar', 'systemAdministrationController@registerUpdateSystemParams');
 });

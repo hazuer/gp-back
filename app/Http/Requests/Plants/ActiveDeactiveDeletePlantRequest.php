@@ -13,6 +13,7 @@ class ActiveDeactiveDeletePlantRequest extends FormRequest
      */
     public function authorize()
     {
+        //if user is admin 
         if (auth()->user()->id_cat_perfil == 1) {
             return true;
         } else {

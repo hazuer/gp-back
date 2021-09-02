@@ -23,7 +23,6 @@ class orderWork extends Model
      */
 
     protected $fillable = [
-        'orden_fabricacion',
         'orden_trabajo_of',
         'id_cat_maquina',
         'id_cat_diseno',
@@ -33,13 +32,13 @@ class orderWork extends Model
         'linea',
         'id_cat_planta',
         'id_operador_responsable',
-        'id_cat_estatus_ot',
         'fecha_cierre_orden',
         'codigo_QR',
         'adiciones',
         'orden_cobrada',
         'fecha_cobro',
         'folio_entrega',
+        'id_cat_estatus_ot',
         'fecha_entrega',
         'peso_entrega_total',
         'id_cliente_autoriza',

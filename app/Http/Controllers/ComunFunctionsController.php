@@ -5,10 +5,12 @@ namespace App\Http\Controllers;
 use App\Models\catPlants;
 use App\Models\catStatus;
 use App\Models\catCountries;
+use App\Models\userLogs;
+use Carbon\Carbon;
 
 class ComunFunctionsController extends Controller
 {
-
+    //function geneeate random password
     public function generatePassword()
     {
         ///get string
@@ -35,7 +37,7 @@ class ComunFunctionsController extends Controller
         return $password;
     }
 
-
+    //function get countries and status
     public function countriesStatusList()
     {
         try {
@@ -58,7 +60,7 @@ class ComunFunctionsController extends Controller
         }
     }
 
-
+    //get plants and status
     public function plantsStatusList()
     {
         try {
@@ -79,5 +81,23 @@ class ComunFunctionsController extends Controller
                 'message' => $exception->getMessage()
             ], 500);
         }
+    }
+
+
+    public function registerLogs(
+        $id_usuario,
+        $tabla,
+        $id_tabla,
+        $actividad,
+        $id_cat_planta
+    ) {
+        $newLog = new userLogs;
+        $newLog->fecha = Carbon::now()->format('Y-m-d H:i:s');
+        $newLog->id_usuario = $id_usuario;
+        $newLog->tabla = $tabla;
+        $newLog->id_tabla = $id_tabla;
+        $newLog->actividad = $actividad;
+        $newLog->id_cat_planta = $id_cat_planta;
+        $newLog->save();
     }
 }

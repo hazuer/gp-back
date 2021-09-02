@@ -140,6 +140,16 @@ class userController extends Controller
                     ->where('usuario.id_dato_usuario', $user->id_dato_usuario)
                     ->first();
 
+                //register log
+                (new  ComunFunctionsController)->registerLogs(
+                    $data->id_dato_usuario,
+                    'datos_usuario',
+                    $data->id_dato_usuario,
+                    'El usuario inició sesión',
+                    $data->id_cat_planta
+                );
+
+                //return response
                 return response()->json([
                     'result' => true,
                     'data' => [

@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Desings;
+namespace App\Http\Requests\Administration;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class RegisterDesignRequest extends FormRequest
+class RegisterUpdateSystemConfigurations extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -30,11 +30,17 @@ class RegisterDesignRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_diseno' => 'required|max:75',
-            'descripcion' => 'nullable',
             'id_cat_planta' => 'required',
-            'tintas.*' => 'required'
-
+            'campo_lote'  => 'required',
+            'campo_cantidad_programada' => 'required',
+            'utiliza_tara'  => 'required',
+            'campo_linea'  => 'required',
+            'requiere_turno'  => 'required',
+            'variacion_maxima'  => 'required',
+            'porcentaje_variacion_aceptado'  => 'required',
+            'utiliza_ph'  => 'nullable',
+            'mide_viscosidad'  => 'nullable',
+            'utiliza_filtro'  => 'nullable',
         ];
     }
 }

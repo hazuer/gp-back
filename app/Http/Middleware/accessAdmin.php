@@ -4,7 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 
-class accessAdminSupervisor
+class accessAdmin
 {
     /**
      * Handle an incoming request.
@@ -15,7 +15,7 @@ class accessAdminSupervisor
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 4) {
+        if (auth()->user()->id_cat_perfil == 1) {
             return $next($request);
         } else {
 
