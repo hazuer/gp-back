@@ -99,7 +99,7 @@ class catCountriesController extends Controller
             $newCountry = new catCountries;
             $newCountry->nombre_pais = $req->nombre_pais;
             $newCountry->id_cat_estatus = 1;
-            $newCountry->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newCountry->id_usuario_crea = auth()->user()->id_usuario;
             $newCountry->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
 
             if ($newCountry->save()) {
@@ -140,7 +140,7 @@ class catCountriesController extends Controller
             //update country
             $updateCountry = catCountries::find($req->id_cat_pais);
             $updateCountry->nombre_pais = $req->nombre_pais;
-            $updateCountry->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateCountry->id_usuario_modifica = auth()->user()->id_usuario;
             $updateCountry->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
 
             if ($updateCountry->save()) {
@@ -171,7 +171,7 @@ class catCountriesController extends Controller
 
         try {
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
 

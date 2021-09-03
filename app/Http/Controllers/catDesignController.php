@@ -190,7 +190,7 @@ class catDesignController extends Controller
             }
 
             //variables user register. date and plant 
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
             $plantId = $req->id_cat_planta;
 
@@ -248,7 +248,7 @@ class catDesignController extends Controller
         try {
 
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //validation if Design will be delete or deactive 
@@ -301,7 +301,7 @@ class catDesignController extends Controller
     {
 
         $plant = $req->id_cat_planta;   //id cat planta
-        $user = auth()->user()->id_dato_usuario;  //user creator
+        $user = auth()->user()->id_usuario;  //user creator
         $dateNow = Carbon::now()->format('Y-m-d H:i:s');  //actual date
         $file = $req->file('archivo_disenos_importar'); //request file
         //import file
@@ -369,7 +369,7 @@ class catDesignController extends Controller
         try {
 
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
             //check status design orders work
             $numOrders = orderWork::where('id_cat_diseno', $req->id_cat_diseno)
@@ -428,7 +428,7 @@ class catDesignController extends Controller
         try {
 
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //check status design orders work

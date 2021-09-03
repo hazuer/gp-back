@@ -113,7 +113,7 @@ class catReasonsController extends Controller
             $newReason->razon = $req->razon;
             $newReason->id_cat_planta = $req->id_cat_planta;
             $newReason->id_cat_estatus = 1;
-            $newReason->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newReason->id_usuario_crea = auth()->user()->id_usuario;
             $newReason->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newReason->save()) {
                 return response()->json([
@@ -155,7 +155,7 @@ class catReasonsController extends Controller
             $updateReason = catReasons::find($req->id_cat_razon);
             $updateReason->razon = $req->razon;
             $updateReason->id_cat_planta = $req->id_cat_planta;
-            $updateReason->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateReason->id_usuario_modifica = auth()->user()->id_usuario;
             $updateReason->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateReason->save()) {
                 return response()->json([
@@ -182,7 +182,7 @@ class catReasonsController extends Controller
     {
         try {
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //validation if reazon will be delete or deactive 

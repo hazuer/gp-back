@@ -112,7 +112,7 @@ class catCustomersController extends Controller
             $newCustomer->nombre_cliente = $req->nombre_cliente;
             $newCustomer->id_cat_planta = $req->id_cat_planta;
             $newCustomer->id_cat_estatus = 1;
-            $newCustomer->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newCustomer->id_usuario_crea = auth()->user()->id_usuario;
             $newCustomer->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newCustomer->save()) {
                 return response()->json([
@@ -153,7 +153,7 @@ class catCustomersController extends Controller
             $updateCustomer =   catCustomers::find($req->id_cat_cliente);
             $updateCustomer->nombre_cliente = $req->nombre_cliente;
             $updateCustomer->id_cat_planta = $req->id_cat_planta;
-            $updateCustomer->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateCustomer->id_usuario_modifica = auth()->user()->id_usuario;
             $updateCustomer->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateCustomer->save()) {
                 return response()->json([
@@ -183,7 +183,7 @@ class catCustomersController extends Controller
 
 
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //validation if customer will be delete or deactive 

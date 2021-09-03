@@ -64,11 +64,11 @@ class systemAdministrationController extends Controller
             $params->utiliza_filtro = $req->utiliza_filtro;
             //if register exists
             if ($params->exists) {
-                $params->id_usuario_modifica = auth()->user()->id_dato_usuario;
+                $params->id_usuario_modifica = auth()->user()->id_usuario;
                 $params->fecha_modificacion =  Carbon::now()->format('Y-m-d H:i:s');
             } else {
                 $params->id_cat_estatus = 1;
-                $params->id_usuario_crea = auth()->user()->id_dato_usuario;
+                $params->id_usuario_crea = auth()->user()->id_usuario;
                 $params->fecha_creacion =  Carbon::now()->format('Y-m-d H:i:s');
             }
             if ($params->save()) {

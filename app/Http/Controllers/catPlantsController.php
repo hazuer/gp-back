@@ -111,7 +111,7 @@ class catPlantsController extends Controller
             $newPlant->nombre_planta = $req->nombre_planta;
             $newPlant->id_cat_pais = $req->id_cat_pais;
             $newPlant->id_cat_estatus = 1;
-            $newPlant->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newPlant->id_usuario_crea = auth()->user()->id_usuario;
             $newPlant->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newPlant->save()) {
                 return response()->json([
@@ -152,7 +152,7 @@ class catPlantsController extends Controller
             $updatePlant = catPlants::find($req->id_cat_planta);
             $updatePlant->nombre_planta = $req->nombre_planta;
             $updatePlant->id_cat_pais = $req->id_cat_pais;
-            $updatePlant->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updatePlant->id_usuario_modifica = auth()->user()->id_usuario;
             $updatePlant->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updatePlant->save()) {
                 return response()->json([
@@ -180,7 +180,7 @@ class catPlantsController extends Controller
 
         try {
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //validation if plant will be delete or deactive 

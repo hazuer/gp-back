@@ -124,7 +124,7 @@ class catTarasController extends Controller
             $newTara->capacidad = $req->capacidad;
             $newTara->id_cat_planta = $req->id_cat_planta;
             $newTara->id_cat_estatus = 1;
-            $newTara->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newTara->id_usuario_crea = auth()->user()->id_usuario;
             $newTara->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newTara->save()) {
                 return response()->json([
@@ -166,7 +166,7 @@ class catTarasController extends Controller
             $updateTara->nombre_tara = $req->nombre_tara;
             $updateTara->capacidad = $req->capacidad;
             $updateTara->id_cat_planta = $req->id_cat_planta;
-            $updateTara->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateTara->id_usuario_modifica = auth()->user()->id_usuario;
             $updateTara->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateTara->save()) {
                 return response()->json([
@@ -193,7 +193,7 @@ class catTarasController extends Controller
     {
         try {
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
 
             //validation if tara will be delete or deactive 

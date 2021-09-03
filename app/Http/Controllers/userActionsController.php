@@ -254,7 +254,7 @@ class userActionsController extends Controller
                         'id_cat_cliente' => $req->id_cat_cliente,
                         'id_cat_estatus' => $req->id_cat_estatus,
                         'id_cat_perfil' => $req->id_cat_perfil,
-                        'id_usuario_crea' => auth()->user()->id_dato_usuario,
+                        'id_usuario_crea' => auth()->user()->id_usuario,
                         'fecha_creacion' => Carbon::now()->format('Y-m-d H:i:s')
 
                     ]
@@ -303,7 +303,7 @@ class userActionsController extends Controller
                         'id_cat_cliente' => $req->id_cat_cliente,
                         'id_cat_estatus' => $req->id_cat_estatus,
                         'id_cat_perfil' => $req->id_cat_perfil,
-                        'id_usuario_modifica' => auth()->user()->id_dato_usuario,
+                        'id_usuario_modifica' => auth()->user()->id_usuario,
                         'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
                     ]
                 );
@@ -346,7 +346,7 @@ class userActionsController extends Controller
                 ->update(
                     [
                         'id_cat_estatus' => $req->id_cat_estatus,
-                        'id_usuario_elimina' => auth()->user()->id_dato_usuario,
+                        'id_usuario_elimina' => auth()->user()->id_usuario,
                         'fecha_eliminacion' => Carbon::now()->format('Y-m-d H:i:s')
                     ]
                 );
@@ -373,7 +373,7 @@ class userActionsController extends Controller
     //             ->update(
     //                 [
     //                     'id_cat_perfil' => $req->id_cat_perfil,
-    //                     'id_usuario_modifica' => auth()->user()->id_dato_usuario,
+    //                     'id_usuario_modifica' => auth()->user()->id_usuario,
     //                     'fecha_modificacion' => Carbon::now()->format('Y-m-d H:i:s')
     //                 ]
     //             );

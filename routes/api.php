@@ -144,4 +144,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('administracion/parametrizar-sistema', 'systemAdministrationController@getSystemParams')->middleware('accessAdmin');
     //system params register and update
     Route::post('administracion/parametrizar-sistema-crear-editar', 'systemAdministrationController@registerUpdateSystemParams');
+
+
+    //delivery Order 
+    //list delivery Orders 
+    Route::get('orden-de-entrega/listar', 'deliveryOrdersController@deliveryOrdersList');
 });

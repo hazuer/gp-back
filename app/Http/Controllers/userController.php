@@ -125,7 +125,7 @@ class userController extends Controller
                     ->leftJoin('cat_planta', 'cat_planta.id_cat_planta', '=', 'usuario.id_cat_planta')
                     ->leftJoin('cat_perfil', 'cat_perfil.id_cat_perfil', '=', 'usuario.id_cat_perfil')
                     ->select(
-                        'usuario.id_dato_usuario',
+                        'usuario.id_usuario',
                         'datos_usuario.nombre',
                         'datos_usuario.apellido_paterno',
                         'datos_usuario.apellido_materno',
@@ -142,9 +142,9 @@ class userController extends Controller
 
                 //register log
                 (new  ComunFunctionsController)->registerLogs(
-                    $data->id_dato_usuario,
-                    'datos_usuario',
-                    $data->id_dato_usuario,
+                    $data->id_usuario,
+                    'usuario',
+                    $data->id_usuario,
                     'El usuario inició sesión',
                     $data->id_cat_planta
                 );
@@ -155,7 +155,7 @@ class userController extends Controller
                     'data' => [
                         'token' => $token,
                         'user' => [
-                            'userId' => $data->id_dato_usuario,
+                            'userId' => $data->id_usuario,
                             'name' => $data->nombre,
                             'last_name' => $data->apellido_paterno,
                             'secondary_last_name' => $data->apellido_materno

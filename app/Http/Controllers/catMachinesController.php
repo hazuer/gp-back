@@ -120,7 +120,7 @@ class catMachinesController extends Controller
             $newMachine->modelo = $req->modelo;
             $newMachine->id_cat_planta = $req->id_cat_planta;
             $newMachine->id_cat_estatus = 1;
-            $newMachine->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newMachine->id_usuario_crea = auth()->user()->id_usuario;
             $newMachine->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newMachine->save()) {
                 return response()->json([
@@ -162,7 +162,7 @@ class catMachinesController extends Controller
             $updateMachine->nombre_maquina = $req->nombre_maquina;
             $updateMachine->modelo = $req->modelo;
             $updateMachine->id_cat_planta = $req->id_cat_planta;
-            $updateMachine->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateMachine->id_usuario_modifica = auth()->user()->id_usuario;
             $updateMachine->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateMachine->save()) {
                 return response()->json([
@@ -209,10 +209,10 @@ class catMachinesController extends Controller
             $updateMachineStatus->id_cat_estatus = $req->id_cat_estatus;
             //validation if machine will be delete
             if ($req->id_cat_estatus == 3) {
-                $updateMachineStatus->id_usuario_elimina = auth()->user()->id_dato_usuario;
+                $updateMachineStatus->id_usuario_elimina = auth()->user()->id_usuario;
                 $updateMachineStatus->fecha_eliminacion = Carbon::now()->format('Y-m-d H:i:s');
             } else {
-                $updateMachineStatus->id_usuario_modifica = auth()->user()->id_dato_usuario;
+                $updateMachineStatus->id_usuario_modifica = auth()->user()->id_usuario;
                 $updateMachineStatus->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             }
             if ($updateMachineStatus->save()) {

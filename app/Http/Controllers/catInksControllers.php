@@ -141,7 +141,7 @@ class catInksControllers extends Controller
             $newInk->id_cat_planta = $req->id_cat_planta;
             $newInk->id_cat_estatus = 1;
             $newInk->aditivo = $aditivo;
-            $newInk->id_usuario_crea = auth()->user()->id_dato_usuario;
+            $newInk->id_usuario_crea = auth()->user()->id_usuario;
             $newInk->fecha_creacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($newInk->save()) {
                 return response()->json([
@@ -186,7 +186,7 @@ class catInksControllers extends Controller
             $updateInk->codigo_cliente = $req->codigo_cliente;
             $updateInk->codigo_gp = $req->codigo_gp;
             $updateInk->aditivo = $aditivo;
-            $updateInk->id_usuario_modifica = auth()->user()->id_dato_usuario;
+            $updateInk->id_usuario_modifica = auth()->user()->id_usuario;
             $updateInk->fecha_modificacion = Carbon::now()->format('Y-m-d H:i:s');
             if ($updateInk->save()) {
                 return response()->json([
@@ -213,7 +213,7 @@ class catInksControllers extends Controller
         try {
 
             //variables user register, date
-            $userId = auth()->user()->id_dato_usuario;
+            $userId = auth()->user()->id_usuario;
             $dateNow = Carbon::now()->format('Y-m-d H:i:s');
             //validation if ink will be delete or deactive 
             if ($req->id_cat_estatus == 2 || $req->id_cat_estatus == 3) {
@@ -280,7 +280,7 @@ class catInksControllers extends Controller
     public function importInkCSV(importInkCsvRequest $req)
     {
         $plant = $req->id_cat_planta;   //id cat planta
-        $user = auth()->user()->id_dato_usuario;  //user creator
+        $user = auth()->user()->id_usuario;  //user creator
         $dateNow = Carbon::now()->format('Y-m-d H:i:s');  //actual date
         $file = $req->file('archivo_tintas_importar'); //request file
         //import file
