@@ -282,7 +282,8 @@ class catInksControllers extends Controller
         $plant = $req->id_cat_planta;   //id cat planta
         $user = auth()->user()->id_usuario;  //user creator
         $dateNow = Carbon::now()->format('Y-m-d H:i:s');  //actual date
-        $file = $req->file('archivo_tintas_importar'); //request file
+
+        $file =  $req->file('file')->store('temp');
         //import file
         $import = new inkImport($plant, $user, $dateNow);
         $import->import($file);

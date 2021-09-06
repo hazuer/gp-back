@@ -30,7 +30,7 @@ class importDesignRequest extends FormRequest
     {
         return [
             'id_cat_planta' => 'required',
-            'archivo_disenos_importar' => 'required|mimes:csv,txt|max:8000000'
+            'file' => 'required|mimes:csv,txt|max:8000000'
         ];
     }
 }

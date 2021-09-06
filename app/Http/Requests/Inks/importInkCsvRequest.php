@@ -31,7 +31,7 @@ class importInkCsvRequest extends FormRequest
     {
         return [
             'id_cat_planta' => 'required',
-            'archivo_tintas_importar' => 'required|mimes:csv,txt|max:8000000'
+            'file' => 'required|mimes:csv,txt|max:8000000'
         ];
     }
 }
