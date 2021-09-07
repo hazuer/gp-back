@@ -126,9 +126,9 @@ Route::group(['middleware' => 'auth:api'], function () {
     //Ink search to designs
     Route::post('catalogo/buscar-tintas', 'catDesignController@inkSearch');
     //create design
-    Route::put('catalogo/crear-disenos', 'catDesignController@registerDesign');
+    Route::post('catalogo/crear-disenos', 'catDesignController@registerDesign');
     //import ink csv
-    Route::post('catalogo/importar-disenos-csv', 'catDesignController@importDesignCSV');
+    Route::put('catalogo/importar-disenos-csv', 'catDesignController@importDesignCSV');
     //one desing data
     Route::get('catalogo/datos-diseno', 'catDesignController@designData')->middleware('accessAdmin');
     //update  desing
