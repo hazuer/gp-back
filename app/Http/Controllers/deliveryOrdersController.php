@@ -99,8 +99,8 @@ class deliveryOrdersController extends Controller
                     'orden_trabajo.id_cat_diseno',
                     'cat_diseno.nombre_diseno',
                     'orden_trabajo.adiciones'
-                );
-            // ->where('orden_trabajo.id_cat_planta', auth()->user()->id_cat_planta);
+                )
+                ->where('orden_trabajo.id_cat_planta', auth()->user()->id_cat_planta);
 
             //valid user profile
             switch (auth()->user()->id_cat_perfil) {
