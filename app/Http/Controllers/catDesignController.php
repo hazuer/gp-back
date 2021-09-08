@@ -58,8 +58,7 @@ class catDesignController extends Controller
 
             //if search has ink name
             if ($req->has('nombre_tinta') && !is_null($req->nombre_tinta)) {
-                $query->orWhereRaw("cat_tinta.nombre_tinta  LIKE '%" . $req->nombre_tinta . "%'")
-                    ->where('diseno_tinta.id_cat_estatus', 1);
+                $query->WhereRaw("cat_tinta.nombre_tinta  LIKE '%" . $req->nombre_tinta . "%'");
             }
 
             //if search contain plan
@@ -125,7 +124,7 @@ class catDesignController extends Controller
                     'id_cat_diseno' => $design->id_cat_diseno,
                     'nombre_diseno' => $design->nombre_diseno,
                     'descripcion' => $design->descripcion,
-                    'tintas' => $inks, //all inks of design
+                    'tintas' => $inks, //all design inks
                     'nombre_planta' => $design->nombre_planta,
                     'estatus' => $design->estatus,
                     'id_cat_estatus' => $design->id_cat_estatus,
@@ -158,7 +157,6 @@ class catDesignController extends Controller
                 ->select('id_cat_tinta', 'nombre_tinta', 'codigo_cliente', 'codigo_gp')
                 ->where('id_cat_planta', $req->id_cat_planta)
                 ->where('aditivo', 0)
-                ->whereRaw("nombre_tinta LIKE '%" . $req->nombre_tinta . "%'")
                 ->get();
 
             return response()->json([

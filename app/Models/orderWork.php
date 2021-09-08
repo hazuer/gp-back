@@ -34,6 +34,7 @@ class orderWork extends Model
         'id_operador_responsable',
         'fecha_cierre_orden',
         'codigo_QR',
+        'adiciones',
         'orden_cobrada',
         'fecha_cobro',
         'folio_entrega',

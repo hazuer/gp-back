@@ -148,5 +148,7 @@ Route::group(['middleware' => 'auth:api'], function () {
 
     //delivery Order 
     //list delivery Orders 
+    Route::get('orden-de-entrega/listas-busqueda-oe', 'deliveryOrdersController@deliveryOrderDataToList');
+    //list delivery Orders 
     Route::get('orden-de-entrega/listar', 'deliveryOrdersController@deliveryOrdersList');
 });

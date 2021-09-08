@@ -30,7 +30,6 @@ class inkSearchRequest extends FormRequest
     public function rules()
     {
         return [
-            'nombre_tinta' => 'required',
             'id_cat_planta' => 'required'
         ];
     }

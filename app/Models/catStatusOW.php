@@ -1,14 +1,14 @@
 <?php
 
-namespace  App\Models;
+namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class catStatus extends Model
+class catStatusOW extends Model
 {
-    protected $table = 'cat_estatus';
+    protected $table = 'cat_estatus_ot';
     //select primary key
-    protected $primaryKey = 'id_cat_estatus';
+    protected $primaryKey = 'id_cat_estatus_ot';
     //
     public $timestamps = false;
 
@@ -18,6 +18,6 @@ class catStatus extends Model
      * @var array
      */
     protected $fillable = [
-        'estatus'
+        'estatus_ot'
     ];
 }
