@@ -147,8 +147,12 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //delivery Order 
-    //list delivery Orders 
-    Route::get('orden-de-entrega/listas-busqueda-oe', 'deliveryOrdersController@deliveryOrderDataToList');
-    //list delivery Orders 
-    Route::get('orden-de-entrega/listar', 'deliveryOrdersController@deliveryOrdersList');
+    //list delivery resources
+    Route::get('orden-de-entrega/listas-busqueda-oe', 'deliveryOrdersController@deliveryOrderDataToList')->middleware('AccessOE');
+    //list delivery orders 
+    Route::get('orden-de-entrega/listar', 'deliveryOrdersController@deliveryOrdersList')->middleware('AccessOE');
+    // delivery orders register resoucres
+    Route::get('orden-de-entrega/registrar-oe-recursos', 'deliveryOrdersController@registerDeliveryOrderResources')->middleware('AccessOE');
+    //delivery orders get inks desing
+    Route::get('orden-de-entrega/diseno-tintas', 'deliveryOrdersController@getInkDesing')->middleware('AccessOE');
 });

@@ -10,6 +10,12 @@ use App\Models\catCustomers;
 use App\Models\catDesign;
 use App\Models\catMachines;
 use App\Models\catStatusOW;
+use App\Models\catShift;
+use App\Models\catInks;
+use App\Models\catTaras;
+use App\Models\catReasons;
+use App\Models\catDesignInks;
+use App\Models\systemConfigurations;
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -18,6 +24,7 @@ use Illuminate\Support\Facades\DB;
 class deliveryOrdersController extends Controller
 {
 
+    //resources list delivery orders
     public function deliveryOrderDataToList()
     {
         try {
@@ -40,7 +47,7 @@ class deliveryOrdersController extends Controller
             $statusOWList = catStatusOW::select('id_cat_estatus_ot', 'estatus_ot')
                 ->get();
 
-            //designs list
+            //machines list
             $machinesList = catMachines::select('id_cat_maquina', 'nombre_maquina')
                 ->where('id_cat_planta', auth()->user()->id_cat_planta)
                 ->where('id_cat_estatus', 1)
@@ -67,9 +74,6 @@ class deliveryOrdersController extends Controller
             ], 500);
         }
     }
-
-
-
 
     //function get list delivery orders
     public function deliveryOrdersList(Request $req)
@@ -184,51 +188,51 @@ class deliveryOrdersController extends Controller
                     $sortField = "orden_trabajo.id_orden_trabajo";
                     break;
             }
-            //order list
+            //sort list
             $query->orderBy($sortField, $direction);
 
             $perPage = $req->has('porPagina') && !is_null($req->porPagina)  ? intVal($req->porPagina) : 10; //num result per page
             $actualPage = $req->has('pagina') && !is_null($req->pagina) ? intVal($req->pagina) : 1; //actual page
             $deliveryOrdersTotal = $query->count('orden_trabajo.id_orden_trabajo'); //total rows
-            $deliveryOrders = $query->offset(($actualPage - 1) * $perPage)->limit($perPage)->get(); //result
-            //final list
-            $deliveryOrdersList = array();
-            // orders construction 
-            foreach ($deliveryOrders as $deliveryOrder) {
-                $inks = array(); //inks to each designs
-                //query to get inks 
-                $inksList = inkDetailsWorkOrders::leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'ot_detalle_tinta.id_cat_tinta')
-                    ->where('ot_detalle_tinta.id_orden_trabajo', $deliveryOrder->id_orden_trabajo)
-                    ->get();
-                //each ink to ink details work order
-                foreach ($inksList as $ink) {
-                    //add array inks 
-                    array_push($inks, array(
-                        'nombre_tinta' => $ink->nombre_tinta,
-                        'codigo_cliente' => $ink->codigo_cliente,
-                        'codigo_gp' => $ink->codigo_cliente,
-                        'aditivo' => $ink->aditivo == 0 ? 'No' : 'Si',
-                    ));
-                }
-                //add array final list
-                array_push($deliveryOrdersList, array(
-                    'id_orden_trabajo'  => $deliveryOrder->id_orden_trabajo,
-                    'orden_trabajo_of'  => $deliveryOrder->orden_trabajo_of,
-                    'fecha_creacion'  => $deliveryOrder->fecha_creacion,
-                    'id_operador_responsable'  => $deliveryOrder->id_operador_responsable,
-                    'nombre_operador_responsable'  => $deliveryOrder->nombre_operador_responsable,
-                    'id_cliente_autoriza'  => $deliveryOrder->id_cliente_autoriza,
-                    'nombre_cliente'  => $deliveryOrder->nombre_cliente,
-                    'id_cat_estatus_ot' => $deliveryOrder->id_cat_estatus_ot,
-                    'estatus_ot'  => $deliveryOrder->estatus_ot,
-                    'id_cat_maquina' => $deliveryOrder->id_cat_maquina,
-                    'nombre_maquina'  => $deliveryOrder->nombre_maquina,
-                    'id_cat_diseno' => $deliveryOrder->id_cat_diseno,
-                    'nombre_diseno' => $deliveryOrder->nombre_diseno,
-                    'tintas' => $inks, //all orders inks
-                    'adiciones' => $deliveryOrder->adiciones
-                ));
-            }
+            $deliveryOrdersList = $query->offset(($actualPage - 1) * $perPage)->limit($perPage)->get(); //result
+            // //final list
+            // $deliveryOrdersList = array();
+            // // orders construction 
+            // foreach ($deliveryOrders as $deliveryOrder) {
+            //     $inks = array(); //inks to each designs
+            //     //query to get inks 
+            //     $inksList = inkDetailsWorkOrders::leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'ot_detalle_tinta.id_cat_tinta')
+            //         ->where('ot_detalle_tinta.id_orden_trabajo', $deliveryOrder->id_orden_trabajo)
+            //         ->get();
+            //     //each ink to ink details work order
+            //     foreach ($inksList as $ink) {
+            //         //add array inks 
+            //         array_push($inks, array(
+            //             'nombre_tinta' => $ink->nombre_tinta,
+            //             'codigo_cliente' => $ink->codigo_cliente,
+            //             'codigo_gp' => $ink->codigo_cliente,
+            //             'aditivo' => $ink->aditivo == 0 ? 'No' : 'Si',
+            //         ));
+            //     }
+            //     //add array final list
+            //     array_push($deliveryOrdersList, array(
+            //         'id_orden_trabajo'  => $deliveryOrder->id_orden_trabajo,
+            //         'orden_trabajo_of'  => $deliveryOrder->orden_trabajo_of,
+            //         'fecha_creacion'  => $deliveryOrder->fecha_creacion,
+            //         'id_operador_responsable'  => $deliveryOrder->id_operador_responsable,
+            //         'nombre_operador_responsable'  => $deliveryOrder->nombre_operador_responsable,
+            //         'id_cliente_autoriza'  => $deliveryOrder->id_cliente_autoriza,
+            //         'nombre_cliente'  => $deliveryOrder->nombre_cliente,
+            //         'id_cat_estatus_ot' => $deliveryOrder->id_cat_estatus_ot,
+            //         'estatus_ot'  => $deliveryOrder->estatus_ot,
+            //         'id_cat_maquina' => $deliveryOrder->id_cat_maquina,
+            //         'nombre_maquina'  => $deliveryOrder->nombre_maquina,
+            //         'id_cat_diseno' => $deliveryOrder->id_cat_diseno,
+            //         'nombre_diseno' => $deliveryOrder->nombre_diseno,
+            //         'tintas' => $inks, //all orders inks
+            //         'adiciones' => $deliveryOrder->adiciones
+            //     ));
+            // }
             return response()->json([
                 'result' => true,
                 'deliveryOrdersTotal' => $deliveryOrdersTotal,
@@ -244,6 +248,109 @@ class deliveryOrdersController extends Controller
             ], 500);
         }
     }
+
+    //resources regiter delivery oder
+    public function registerDeliveryOrderResources()
+    {
+        try {
+            //operator
+            $operator = userData::leftJoin('usuario', 'usuario.id_dato_usuario', 'datos_usuario.id_dato_usuario')
+                ->select(
+                    DB::raw('CONCAT(nombre," ",apellido_paterno," ",apellido_materno) AS nombre_operador_responsable')
+                )
+                ->where('usuario.id_usuario', auth()->user()->id_usuario)
+                ->first();
+            //customer
+            $customer = catCustomers::select('nombre_cliente')
+                ->where('id_cat_cliente', auth()->user()->id_cat_cliente)
+                ->first();
+
+            //status order work  list
+            $statusOWList = catStatusOW::select('id_cat_estatus_ot', 'estatus_ot')
+                ->get();
+
+            //desings
+            $designsList = catDesign::select('id_cat_diseno', 'nombre_diseno')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+            //machines list
+            $machinesList = catMachines::select('id_cat_maquina', 'nombre_maquina')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+
+            //Shifts
+            $shiftsList = catShift::all();
+            //taras
+            $tarasList = catTaras::select('id_cat_tara', 'nombre_tara')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+            //Reasons   
+            $reasonsList = catReasons::select('id_cat_razon', 'razon')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+
+            //additives
+            $additivesList = catInks::select('id_cat_tinta', 'nombre_tinta', 'codigo_cliente', 'codigo_gp')
+                ->where('id_cat_estatus', 1)
+                ->where('aditivo', 1)
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->get();
+
+
+
+            return response()->json([
+                'result' => true,
+                'operator' => $operator,
+                'customer' =>  $customer,
+                'statusOWList' =>  $statusOWList,
+                'designsList' => $designsList,
+                'machinesList' => $machinesList,
+                'shiftsList' => $shiftsList,
+                'tarasList' => $tarasList,
+                'reasonsList' => $reasonsList,
+                'additivesList' => $additivesList
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+
+    public function getInkDesing(Request $req)
+    {
+        try {
+            $inksList = catDesignInks::leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'diseno_tinta.id_cat_tinta')
+                ->select(
+                    'cat_tinta.id_cat_tinta',
+                    'cat_tinta.nombre_tinta',
+                    'cat_tinta.codigo_cliente',
+                    'cat_tinta.codigo_gp'
+                )
+                ->where('diseno_tinta.id_cat_diseno', $req->id_cat_diseno)
+                ->where('cat_tinta.id_cat_estatus', 1)
+                ->get();
+
+            return response()->json([
+                'result' => true,
+                'inksList' => $inksList,
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function registerdeliveryOrder()
     {
