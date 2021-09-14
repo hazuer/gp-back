@@ -19,6 +19,7 @@ class inkDetailsWorkOrders extends Model
      */
 
 
+
     protected $fillable = [
         'id_orden_trabajo',
         'id_cat_tinta',
@@ -42,6 +43,8 @@ class inkDetailsWorkOrders extends Model
         'id_usuario_modifica',
         'fecha_modificacion',
         'id_usuario_elimina',
-        'fecha_eliminacion'
+        'fecha_eliminacion',
+        'aditivo_tinta',
+        'codigo_qr'
     ];
 }

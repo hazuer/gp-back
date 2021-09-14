@@ -15,7 +15,10 @@ use App\Models\catInks;
 use App\Models\catTaras;
 use App\Models\catReasons;
 use App\Models\catDesignInks;
-use App\Models\systemConfigurations;
+use App\Models\plantFolio;
+use Illuminate\Support\Collection;
+
+use App\Http\Requests\DeliveryOrders\registerOERequest;
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -82,7 +85,7 @@ class deliveryOrdersController extends Controller
 
             $query = orderWork::leftJoin('usuario', 'usuario.id_usuario', 'orden_trabajo.id_operador_responsable')
                 ->leftJoin('datos_usuario', 'datos_usuario.id_dato_usuario', 'usuario.id_dato_usuario')
-                ->leftJoin('cat_cliente', 'cat_cliente.id_cat_cliente', 'orden_trabajo.id_cliente_autoriza')
+                ->leftJoin('cat_cliente', 'cat_cliente.id_cat_cliente', 'orden_trabajo.id_cat_cliente')
                 ->leftJoin('cat_estatus_ot', 'cat_estatus_ot.id_cat_estatus_ot', 'orden_trabajo.id_cat_estatus_ot')
                 ->leftJoin('cat_maquina', 'cat_maquina.id_cat_maquina', 'orden_trabajo.id_cat_maquina')
                 ->leftJoin('cat_diseno', 'cat_diseno.id_cat_diseno', 'orden_trabajo.id_cat_diseno')
@@ -294,7 +297,7 @@ class deliveryOrdersController extends Controller
                 ->get();
 
             //additives
-            $additivesList = catInks::select('id_cat_tinta', 'nombre_tinta', 'codigo_cliente', 'codigo_gp')
+            $additivesList = catInks::select('id_cat_tinta', 'nombre_tinta', 'codigo_cliente', 'codigo_gp', 'aditivo')
                 ->where('id_cat_estatus', 1)
                 ->where('aditivo', 1)
                 ->where('id_cat_planta', auth()->user()->id_cat_planta)
@@ -332,7 +335,8 @@ class deliveryOrdersController extends Controller
                     'cat_tinta.id_cat_tinta',
                     'cat_tinta.nombre_tinta',
                     'cat_tinta.codigo_cliente',
-                    'cat_tinta.codigo_gp'
+                    'cat_tinta.codigo_gp',
+                    'cat_tinta.aditivo'
                 )
                 ->where('diseno_tinta.id_cat_diseno', $req->id_cat_diseno)
                 ->where('cat_tinta.id_cat_estatus', 1)
@@ -352,7 +356,131 @@ class deliveryOrdersController extends Controller
     }
 
 
-    public function registerdeliveryOrder()
+    public function registerdeliveryOrder(registerOERequest $req)
     {
+        DB::beginTransaction();
+
+        try {
+
+            //variables
+            $user = auth()->user()->id_usuario;
+            $plant = auth()->user()->id_cat_planta;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
+            $customer = auth()->user()->id_cat_cliente;
+
+            //folio
+            $folioDB = plantFolio::where('id_cat_planta', $plant)
+                ->where('folio_entrega', '<>', Null)
+                ->first();
+            if ($folioDB) {
+                $folio = $folioDB->folio_entrega + 1;
+            } else {
+                $folio = 1;
+            }
+            //adiciones
+            $adicciones = 0;
+            $collection = collect($req->tintas);
+            if ($collection->contains('aditivo', true)) {
+                $adicciones = 1;
+            }
+
+
+            $newOrder = new orderWork;
+            $newOrder->orden_trabajo_of = $req->orden_trabajo_of;
+            $newOrder->id_cat_maquina = $req->id_cat_maquina;
+            $newOrder->id_cat_diseno = $req->id_cat_diseno;
+            $newOrder->cantidad_programado = $req->cantidad_programado;
+            $newOrder->peso_total = $req->peso_total;
+            $newOrder->id_cat_turno = $req->id_cat_turno;
+            $newOrder->linea = $req->linea;
+            $newOrder->id_cat_planta = $plant;
+            $newOrder->id_operador_responsable = $user;
+            $newOrder->fecha_cierre_orden = $req->fecha_cierre_orden;
+            $newOrder->adiciones = $adicciones;
+            $newOrder->folio_entrega = $folio;
+            $newOrder->id_cat_estatus_ot = 1;
+            $newOrder->id_cat_cliente = $customer;
+            $newOrder->id_usuario_crea =  $user;
+            $newOrder->fecha_creacion = $dateNow;
+            $newOrder->save();
+
+            $pintInks = array(); //final array response
+            //
+            foreach ($req->tintas as $tinta) {
+
+                $newDetail = new inkDetailsWorkOrders;
+                $newDetail->id_orden_trabajo = $newOrder->id_orden_trabajo;
+                $newDetail->id_cat_tinta = $tinta['id_cat_tinta'];
+                $newDetail->lote = $tinta['lote'];
+                $newDetail->id_cat_tara = $tinta['id_cat_tara'];
+                $newDetail->peso_individual = $tinta['peso_individual'];
+                $newDetail->utiliza_ph = $tinta['utiliza_ph'];
+                $newDetail->mide_viscosidad = $tinta['mide_viscosidad'];
+                $newDetail->utiliza_filtro = $tinta['utiliza_filtro'];
+                $newDetail->porcentaje_variacion = $tinta['porcentaje_variacion'];
+                $newDetail->id_cat_estatus = 1;
+                $newDetail->peso_individual_gp = $tinta['peso_individual_gp'];
+                $newDetail->id_cat_lectura_gp = $tinta['id_cat_lectura_gp'];
+                $newDetail->id_cat_razon = $tinta['id_cat_razon'];
+                $newDetail->aditivo_tinta = $tinta['aditivo_tinta'];
+                $newDetail->id_usuario_crea = $user;
+                $newDetail->fecha_creacion =  $dateNow;
+                $newDetail->save();
+
+                array_push($pintInks, array(
+                    'id_cat_tinta' => $tinta['id_cat_tinta'],
+                    'url' => url('/imprimirQr/' . $newDetail->id_ot_detalle_tinta)
+                ));
+            }
+
+            //commit
+            DB::commit();
+
+            //reponse
+            return response()->json([
+                'result' => true,
+                'folio' => $folio,
+                'printInks' => $pintInks
+
+            ], 200);
+        } catch (\Exception $exception) {
+
+            //
+            DB::rollback();
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    public function getQr($id)
+    {
+        try {
+
+            $dataQr = inkDetailsWorkOrders::leftJoin('orden_trabajo', 'orden_trabajo.id_orden_trabajo', 'ot_detalle_tinta.id_orden_trabajo')
+                ->leftJoin('cat_diseno', 'cat_diseno.id_cat_diseno', 'orden_trabajo.id_cat_diseno')
+                ->leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'ot_detalle_tinta.id_cat_tinta')
+                ->select(
+                    'ot_detalle_tinta.id_ot_detalle_tinta',
+                    'cat_tinta.nombre_tinta',
+                    'orden_trabajo.folio_entrega',
+                    'orden_trabajo.orden_trabajo_of',
+                    'cat_diseno.nombre_diseno'
+                )->where('id_ot_detalle_tinta', $id)
+                ->first();
+
+            //return view
+            return view('imprimirQr', compact('dataQr', $dataQr));
+        } catch (\Exception $exception) {
+            //
+            DB::rollback();
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
     }
 }
