@@ -15,7 +15,8 @@
         "laravel/framework": "^7.29",
         "laravel/passport": "^9.4",
         "laravel/tinker": "^2.5",
-        "maatwebsite/excel": "^3.1"
+        "maatwebsite/excel": "^3.1",
+        "milon/barcode": "^7.0"
     },
     "require-dev": {
         "facade/ignition": "^2.0",

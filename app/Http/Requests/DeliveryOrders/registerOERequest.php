@@ -13,8 +13,8 @@ class registerOERequest extends FormRequest
      */
     public function authorize()
     {
-        //if user is admin 
-        if (auth()->user()->id_cat_perfil == 1 || auth()->user()->id_cat_perfil == 2 || auth()->user()->id_cat_perfil == 4) {
+        //if user is supervior or operator
+        if (auth()->user()->id_cat_perfil == 2 || auth()->user()->id_cat_perfil == 4) {
             return true;
         } else {
 
