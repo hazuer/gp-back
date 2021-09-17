@@ -16,7 +16,7 @@ use App\Models\catTaras;
 use App\Models\catReasons;
 use App\Models\catDesignInks;
 use App\Models\plantFolio;
-use Illuminate\Support\Collection;
+use App\Http\Controllers\ComunFunctionsController;
 
 use App\Http\Requests\DeliveryOrders\registerOERequest;
 
@@ -362,6 +362,8 @@ class deliveryOrdersController extends Controller
 
         try {
 
+
+
             //variables
             $user = auth()->user()->id_usuario;
             $plant = auth()->user()->id_cat_planta;
@@ -431,6 +433,18 @@ class deliveryOrdersController extends Controller
                     'id_cat_tinta' => $tinta['id_cat_tinta'],
                     'url' => url('/imprimirQr/' . $newDetail->id_ot_detalle_tinta)
                 ));
+            }
+
+
+            if (auth()->user()->id_cat_perfil == 2) {
+                //register log OE
+                (new  ComunFunctionsController)->registerLogs(
+                    $user,
+                    'orden_trabajo',
+                    $newOrder->id_orden_trabajo,
+                    'Captura manual por supervisor GP - creación OE',
+                    $plant
+                );
             }
 
             //commit
