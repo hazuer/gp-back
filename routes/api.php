@@ -157,4 +157,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('orden-de-entrega/diseno-tintas', 'deliveryOrdersController@getInkDesing')->middleware('AccessOE');
     //delivery orders create
     Route::post('orden-de-entrega/crear', 'deliveryOrdersController@registerdeliveryOrder');
+    //get delivery order
+    Route::get('orden-de-entrega/obtener-oe', 'deliveryOrdersController@getDeliveryOrder')->middleware('AccessOE');
+    //update delivery order
+    Route::post('orden-de-entrega/editar', 'deliveryOrdersController@updateDeliveryOrder');
 });
