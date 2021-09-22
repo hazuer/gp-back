@@ -108,24 +108,30 @@ class deliveryOrdersController extends Controller
                     'orden_trabajo.id_cat_diseno',
                     'cat_diseno.nombre_diseno',
                     'orden_trabajo.adiciones'
-                )
-                ->where('orden_trabajo.id_cat_planta', auth()->user()->id_cat_planta);
+                );
+
 
             //valid user profile
             switch (auth()->user()->id_cat_perfil) {
 
-                case 2;
+                case 2; //oprator
                     $query->where('orden_trabajo.id_operador_responsable', auth()->user()->id_usuario);
                     break;
-                case 4;
+                case 4; //supervisor 
+
+                    $query->where('orden_trabajo.id_cat_planta', auth()->user()->id_cat_planta);
                     //if search  has user id
                     if ($req->has('id_usuario') && !is_null($req->id_usuario)) {
                         $query->orWhere('orden_trabajo.id_operador_responsable', '=', $req->id_usuario);
                     }
                     //if search  has customer
                     if ($req->has('id_cat_cliente') && !is_null($req->id_cat_cliente)) {
-                        $query->orWhere('orden_trabajo.id_cliente_autoriza', '=', $req->id_cat_cliente);
+                        $query->orWhere('orden_trabajo.id_cat_cliente', '=', $req->id_cat_cliente);
                     }
+                    break;
+                case 3; //customer
+                case 6; //customer supervisor
+                    $query->where('orden_trabajo.id_cat_cliente', auth()->user()->id_cat_cliente);
                     break;
                 default;
             }

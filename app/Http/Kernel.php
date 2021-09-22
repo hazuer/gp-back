@@ -67,6 +67,7 @@ class Kernel extends HttpKernel
 
         'accessAdmin' => \App\Http\Middleware\accessAdmin::class,
         'AccessOE' => \App\Http\Middleware\AccessOE::class,
+        'AccessReceptions' => \App\Http\Middleware\AccessReceptions::class,
 
     ];
 }
