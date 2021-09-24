@@ -21,6 +21,8 @@ use App\Http\Controllers\ComunFunctionsController;
 
 use App\Http\Requests\DeliveryOrders\registerOERequest;
 use App\Http\Requests\DeliveryOrders\updateOEResquest;
+use App\Http\Requests\DeliveryOrders\checkQrRequest;
+use App\Http\Requests\DeliveryOrders\receiveOrderRequest;
 
 use Illuminate\Support\Str;
 use Carbon\Carbon;
@@ -95,6 +97,7 @@ class deliveryOrdersController extends Controller
                 ->leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'ot_detalle_tinta.id_cat_tinta')
                 ->select(
                     'orden_trabajo.id_orden_trabajo',
+                    'orden_trabajo.folio_entrega',
                     'orden_trabajo.orden_trabajo_of',
                     'orden_trabajo.fecha_creacion',
                     'orden_trabajo.id_operador_responsable',
@@ -131,7 +134,8 @@ class deliveryOrdersController extends Controller
                     break;
                 case 3; //customer
                 case 6; //customer supervisor
-                    $query->where('orden_trabajo.id_cat_cliente', auth()->user()->id_cat_cliente);
+                    $query->where('orden_trabajo.id_cat_cliente', auth()->user()->id_cat_cliente)
+                        ->WhereIn('orden_trabajo.id_cat_estatus_ot', [1, 3]);
                     break;
                 default;
             }
@@ -398,7 +402,7 @@ class deliveryOrdersController extends Controller
             $newOrder->id_cat_maquina = $req->id_cat_maquina;
             $newOrder->id_cat_diseno = $req->id_cat_diseno;
             $newOrder->cantidad_programado = $req->cantidad_programado;
-            $newOrder->peso_total = $req->peso_total;
+            $newOrder->peso_entrega_total = $req->peso_entrega_total;
             $newOrder->id_cat_turno = $req->id_cat_turno;
             $newOrder->linea = $req->linea;
             $newOrder->id_cat_planta = $plant;
@@ -421,7 +425,6 @@ class deliveryOrdersController extends Controller
                 $newDetail->id_cat_tinta = $tinta['id_cat_tinta'];
                 $newDetail->lote = $tinta['lote'];
                 $newDetail->id_cat_tara = $tinta['id_cat_tara'];
-                $newDetail->peso_individual = $tinta['peso_individual'];
                 $newDetail->utiliza_ph = $tinta['utiliza_ph'];
                 $newDetail->mide_viscosidad = $tinta['mide_viscosidad'];
                 $newDetail->utiliza_filtro = $tinta['utiliza_filtro'];
@@ -535,6 +538,7 @@ class deliveryOrdersController extends Controller
                     'orden_trabajo.id_cat_turno',
                     'cat_turno.turno',
                     'orden_trabajo.cantidad_programado',
+                    'orden_trabajo.peso_entrega_total',
                     'orden_trabajo.peso_total',
                     'orden_trabajo.linea',
                     'orden_trabajo.fecha_cierre_orden',
@@ -548,6 +552,7 @@ class deliveryOrdersController extends Controller
             $deliveryOrderData['inks'] = inkDetailsWorkOrders::leftJoin('cat_tinta', 'cat_tinta.id_cat_tinta', 'ot_detalle_tinta.id_cat_tinta')
                 ->leftJoin('cat_tara', 'cat_tara.id_cat_tara', 'ot_detalle_tinta.id_cat_tinta')
                 ->leftJoin('cat_lectura', 'cat_lectura.id_cat_lectura', 'ot_detalle_tinta.id_cat_lectura_gp')
+                ->leftJoin('cat_lectura as lectura_cliente', 'lectura_cliente.id_cat_lectura', 'ot_detalle_tinta.id_cat_lectura_cliente')
                 ->leftJoin('cat_razon', 'cat_razon.id_cat_razon', 'ot_detalle_tinta.id_cat_razon')
                 ->select(
                     'ot_detalle_tinta.id_ot_detalle_tinta',
@@ -560,14 +565,16 @@ class deliveryOrdersController extends Controller
                     'ot_detalle_tinta.lote',
                     'ot_detalle_tinta.id_cat_tara',
                     'cat_tara.nombre_tara',
-                    'ot_detalle_tinta.peso_individual',
                     'ot_detalle_tinta.utiliza_ph',
                     'ot_detalle_tinta.mide_viscosidad',
                     'ot_detalle_tinta.utiliza_filtro',
                     'ot_detalle_tinta.porcentaje_variacion',
                     'ot_detalle_tinta.peso_individual_gp',
+                    'ot_detalle_tinta.peso_individual_cliente',
                     'ot_detalle_tinta.id_cat_lectura_gp',
                     'cat_lectura.lectura',
+                    'ot_detalle_tinta.id_cat_lectura_cliente',
+                    'lectura_cliente.lectura',
                     'ot_detalle_tinta.id_cat_razon',
                     'cat_razon.razon',
                     'ot_detalle_tinta.aditivo_tinta'
@@ -605,7 +612,7 @@ class deliveryOrdersController extends Controller
                     $updateOrder->orden_trabajo_of = $req->orden_trabajo_of;
                     $updateOrder->id_cat_maquina = $req->id_cat_maquina;
                     $updateOrder->cantidad_programado = $req->cantidad_programado;
-                    $updateOrder->peso_total = $req->peso_total;
+                    $updateOrder->peso_entrega_total = $req->peso_entrega_total;
                     $updateOrder->id_cat_turno = $req->id_cat_turno;
                     $updateOrder->linea = $req->linea;
                     $updateOrder->fecha_cierre_orden = $req->fecha_cierre_orden;
@@ -614,12 +621,20 @@ class deliveryOrdersController extends Controller
                         $updateOrder->id_cat_diseno = $req->id_cat_diseno;
                         inkDetailsWorkOrders::where('id_orden_trabajo', $req->id_orden_trabajo)->delete();
                     }
-                    $updateOrder->id_cat_estatus_ot = 3; //update
+
                     $updateOrder->id_usuario_modifica =  $user;
                     $updateOrder->fecha_modificacion = $dateNow;
                     break;
+                case 5:
+                case 6:
+                    return response()->json([
+                        'result' => false,
+                        'message' => 'La orden de entrega no puede ser modificada'
+                    ], 422);
             }
-            //aditti validation
+            //status
+            $updateOrder->id_cat_estatus_ot = 3; //update
+            //adit validation
             $collection = collect($req->tintas);
             if ($collection->contains('aditivo', true)) {
                 $updateOrder->adiciones = 1;
@@ -637,7 +652,6 @@ class deliveryOrdersController extends Controller
                 ]);
                 $updateOrnNew->lote = $tinta['lote'];
                 $updateOrnNew->id_cat_tara = $tinta['id_cat_tara'];
-                $updateOrnNew->peso_individual = $tinta['peso_individual'];
                 $updateOrnNew->utiliza_ph = $tinta['utiliza_ph'];
                 $updateOrnNew->mide_viscosidad = $tinta['mide_viscosidad'];
                 $updateOrnNew->utiliza_filtro = $tinta['utiliza_filtro'];
@@ -686,6 +700,174 @@ class deliveryOrdersController extends Controller
             ], 200);
         } catch (\Exception $exception) {
             //if someting wrong rollback
+            DB::rollback();
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //recepciontion
+    //resources list orders receptions
+    public function OrderReceptionResources()
+    {
+        try {
+            //operator cliente
+            $operator = userData::leftJoin('usuario', 'usuario.id_dato_usuario', 'datos_usuario.id_dato_usuario')
+                ->select(
+                    DB::raw('CONCAT(nombre," ",apellido_paterno," ",apellido_materno) AS nombre_operador_responsable')
+                )
+                ->where('usuario.id_usuario', auth()->user()->id_usuario)
+                ->first();
+            //manufacturing order
+            $manufacturingOrderList = orderWork::select('orden_trabajo_of')
+                ->where('id_cat_cliente', auth()->user()->id_cat_cliente)
+                ->WhereIn('orden_trabajo.id_cat_estatus_ot', [1, 3])
+                ->groupBy('orden_trabajo_of')
+                ->get();
+            //operators gp list
+            $operatorsList = userData::leftJoin('usuario', 'usuario.id_dato_usuario', 'datos_usuario.id_dato_usuario')
+                ->select(
+                    'usuario.id_usuario',
+                    DB::raw('CONCAT(datos_usuario.nombre," ",datos_usuario.apellido_paterno," ",datos_usuario.apellido_materno) AS nombre_operador_responsable')
+                )
+                ->where('usuario.id_cat_planta', auth()->user()->id_cat_planta)
+                ->whereIn('usuario.id_cat_perfil', [2, 4])
+                ->where('id_cat_estatus', 1)
+                ->get();
+            //machines list
+            $machinesList = catMachines::select('id_cat_maquina', 'nombre_maquina')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+
+            //designs list
+            $designsList = catDesign::select('id_cat_diseno', 'nombre_diseno')
+                ->where('id_cat_planta', auth()->user()->id_cat_planta)
+                ->where('id_cat_estatus', 1)
+                ->get();
+
+            //cat reading  
+            $catReading = catReading::all();
+
+            return response()->json([
+                'result' => true,
+                'operator' => $operator,
+                'manufacturingOrderList' => $manufacturingOrderList,
+                'operatorsList' => $operatorsList,
+                'machinesList' => $machinesList,
+                'designsList' => $designsList,
+                'catReading' => $catReading
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //get delivery Order reception by QR
+    public function getOrderReceptionByQR(Request $req)
+    {
+        try {
+            $order = orderWork::leftJoin('ot_detalle_tinta', 'ot_detalle_tinta.id_orden_trabajo', 'orden_trabajo.id_orden_trabajo')
+                ->select('orden_trabajo.id_orden_trabajo')
+                ->where('ot_detalle_tinta.id_ot_detalle_tinta', $req->id_ot_detalle_tinta)
+                ->WhereIn('orden_trabajo.id_cat_estatus_ot', [1, 3])
+                ->first();
+
+            if ($order) {
+                $req->request->add(['id_orden_trabajo' => $order->id_orden_trabajo]);
+                return $this->getDeliveryOrder($req);
+            } else {
+                return response()->json([
+                    'result' => false,
+                    'message' => 'No se encontro una orden de recepcion para esta etiqueta'
+                ], 404);
+            }
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //verify if qr exist in delivery order
+    public function checkQrOrderReception(checkQrRequest $req)
+    {
+        try {
+            if (inkDetailsWorkOrders::where('id_ot_detalle_tinta', $req->id_ot_detalle_tinta)
+                ->where('id_orden_trabajo', $req->id_orden_trabajo)
+                ->exists()
+            ) {
+                return response()->json([
+                    'result' => true
+                ], 500);
+            } else {
+                return response()->json([
+                    'result' => false,
+                    'message' => 'La tinta no corresponde a la orden de recepción'
+                ], 500);
+            }
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
+
+    //recive Order 
+    public function receiveOrder(receiveOrderRequest $req)
+    {
+
+        DB::beginTransaction();
+
+        try {
+            //variables
+            $user = auth()->user()->id_usuario;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
+            $plant = auth()->user()->id_cat_planta;
+            //get order 
+            $receiveOrder = orderWork::find($req->id_orden_trabajo);
+            $receiveOrder->peso_total = $req->peso_total;
+            $receiveOrder->fecha_entrega = $dateNow;
+            $receiveOrder->id_cat_estatus_ot = 2;
+            $receiveOrder->id_cliente_autoriza = $user;
+
+            foreach ($req->tintas as $tinta) {
+                $receiveOrderDetail =  inkDetailsWorkOrders::find($tinta['id_ot_detalle_tinta']);
+                $receiveOrderDetail->peso_individual_gp = $tinta['peso_individual_gp'];
+                $receiveOrderDetail->id_cat_lectura_gp = $tinta['id_cat_lectura_cliente'];
+                $receiveOrderDetail->existe_diferencia_entrega = $tinta['existe_diferencia_entrega'];
+                $receiveOrderDetail->total_diferencia_entrega = $tinta['total_diferencia_entrega'];
+                $receiveOrderDetail->save();
+            }
+
+            //register log reception
+            $collection = collect($req->tintas);
+            if (auth()->user()->id_cat_perfil == 6 && $collection->contains('id_cat_lectura_cliente', 1)) {
+
+                (new  ComunFunctionsController)->registerLogs(
+                    $user,
+                    'orden_trabajo',
+                    $req->id_orden_trabajo,
+                    'Captura manual por supervisor Cliente - recepción OE',
+                    $plant
+                );
+            }
+
+            //commit
+            DB::commit();
+        } catch (\Exception $exception) {
+            //
             DB::rollback();
             //internal server error reponse 
             return response()->json([

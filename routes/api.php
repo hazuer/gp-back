@@ -164,6 +164,14 @@ Route::group(['middleware' => 'auth:api'], function () {
 
 
     //receptions
+    //list delivery resources
+    Route::get('orden-de-entrega-recepcion/listas-recursos-recepciones', 'deliveryOrdersController@OrderReceptionResources')->middleware('AccessReceptions');
     //receptions list 
     Route::get('orden-de-entrega-recepcion/listar', 'deliveryOrdersController@deliveryOrdersList')->middleware('AccessReceptions');
+    //get delivery order
+    Route::get('orden-de-entrega-recepcion/obtener-oe', 'deliveryOrdersController@getDeliveryOrder')->middleware('AccessReceptions');
+    //get delivery order by Qr
+    Route::get('orden-de-entrega-recepcion/obtener-oe-qr', 'deliveryOrdersController@getOrderReceptionByQR')->middleware('AccessReceptions');
+    //check qr receptions order
+    Route::post('orden-de-entrega-recepcion/validar-qr', 'deliveryOrdersController@checkQrOrderReception');
 });

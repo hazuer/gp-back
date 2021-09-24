@@ -4,7 +4,7 @@ namespace App\Http\Requests\DeliveryOrders;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class registerOERequest extends FormRequest
+class receiveOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,8 +13,8 @@ class registerOERequest extends FormRequest
      */
     public function authorize()
     {
-        //if user is supervior or operator
-        if (auth()->user()->id_cat_perfil == 2 || auth()->user()->id_cat_perfil == 4) {
+        //if user is customer or supervisor customer
+        if (auth()->user()->id_cat_perfil == 3 || auth()->user()->id_cat_perfil == 6) {
             return true;
         } else {
 
@@ -30,14 +30,10 @@ class registerOERequest extends FormRequest
     public function rules()
     {
         return [
-            'orden_trabajo_of' => 'required',
-            'id_cat_maquina' => 'required',
-            'id_cat_diseno' => 'required',
-            'cantidad_programado' => 'nullable',
-            'peso_entrega_total' => 'required',
-            'id_cat_turno' => 'nullable',
-            'linea' => 'required',
-            'fecha_cierre_orden' => 'nullable',
+            'id_orden_trabajo' => 'required',
+            'peso_total_recibido' => 'required',
+            'id_orden_trabajo' => 'required',
+            'id_orden_trabajo' => 'required',
             'tintas.*' => 'required',
         ];
     }
