@@ -148,10 +148,11 @@ class deliveryOrdersController extends Controller
 
 
             //if search has machine
+            if ($req->has('id_cat_maquina') && !is_null($req->id_cat_maquina)) {
+                $query->Where('orden_trabajo.id_cat_maquina', $req->id_cat_maquina);
+            }
 
-
-
-            //if search has orden_trabajo_of name
+            //if search has folio 
             if ($req->has('folio_entrega') && !is_null($req->folio_entrega)) {
                 $query->Where('orden_trabajo.folio_entrega', $req->folio_entrega);
             }
