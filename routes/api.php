@@ -174,4 +174,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('orden-de-entrega-recepcion/obtener-oe-qr', 'deliveryOrdersController@getOrderReceptionByQR')->middleware('AccessReceptions');
     //check qr receptions order
     Route::post('orden-de-entrega-recepcion/validar-qr', 'deliveryOrdersController@checkQrOrderReception');
+    //authorize difference
+    Route::post('orden-de-entrega-recepcion/autorizar-diferencia', 'deliveryOrdersController@authorizeDifference');
+    //receive order
+    Route::post('orden-de-entrega-recepcion/recibir', 'deliveryOrdersController@receiveOrder');
 });

@@ -34,10 +34,8 @@ class registerOERequest extends FormRequest
             'id_cat_maquina' => 'required',
             'id_cat_diseno' => 'required',
             'cantidad_programado' => 'nullable',
-            'peso_entrega_total' => 'required',
             'id_cat_turno' => 'nullable',
             'linea' => 'required',
-            'fecha_cierre_orden' => 'nullable',
             'tintas.*' => 'required',
         ];
     }
