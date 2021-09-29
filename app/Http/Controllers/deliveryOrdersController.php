@@ -129,11 +129,11 @@ class deliveryOrdersController extends Controller
                     $query->where('orden_trabajo.id_cat_planta', auth()->user()->id_cat_planta);
                     //if search  has user id
                     if ($req->has('id_usuario') && !is_null($req->id_usuario)) {
-                        $query->orWhere('orden_trabajo.id_operador_responsable', '=', $req->id_usuario);
+                        $query->Where('orden_trabajo.id_operador_responsable', '=', $req->id_usuario);
                     }
                     //if search  has customer
                     if ($req->has('id_cat_cliente') && !is_null($req->id_cat_cliente)) {
-                        $query->orWhere('orden_trabajo.id_cat_cliente', '=', $req->id_cat_cliente);
+                        $query->Where('orden_trabajo.id_cat_cliente', '=', $req->id_cat_cliente);
                     }
                     break;
                 case 3; //customer
@@ -147,17 +147,27 @@ class deliveryOrdersController extends Controller
             $query->distinct();
 
 
+            //if search has machine
+
+
+
+            //if search has orden_trabajo_of name
+            if ($req->has('folio_entrega') && !is_null($req->folio_entrega)) {
+                $query->Where('orden_trabajo.folio_entrega', $req->folio_entrega);
+            }
+
             //if search has orden_trabajo_of name
             if ($req->has('orden_trabajo_of') && !is_null($req->orden_trabajo_of)) {
-                $query->orWhereRaw("orden_trabajo.orden_trabajo_of  LIKE '%" . $req->orden_trabajo_of . "%'");
+                $query->WhereRaw("orden_trabajo.orden_trabajo_of  LIKE '%" . $req->orden_trabajo_of . "%'");
             }
             //if search has dates
             if ($req->has('fecha_inicio') && !is_null($req->fecha_inicio) && $req->has('fecha_fin') && !is_null($req->fecha_fin)) {
+
                 $query->whereBetween('orden_trabajo.fecha_creacion', [$req->fecha_inicio . ' 00:00:00', $req->fecha_fin . ' 23:59:59']);
             }
             //if search contain status
             if ($req->has('id_cat_diseno') && !is_null($req->id_cat_diseno)) {
-                $query->Where('orden_trabajo.id_cat_diseno', '=', $req->id_cat_diseno);
+                $query->Where('orden_trabajo.id_cat_diseno', $req->id_cat_diseno);
             }
 
             //if search has ink name
@@ -167,7 +177,7 @@ class deliveryOrdersController extends Controller
 
             //if search contain status
             if ($req->has('id_cat_estatus_ot') && !is_null($req->id_cat_estatus_ot)) {
-                $query->Where('orden_trabajo.id_cat_estatus_ot', '=', $req->id_cat_estatus_ot);
+                $query->Where('orden_trabajo.id_cat_estatus_ot', $req->id_cat_estatus_ot);
             }
 
             //if search contain status
