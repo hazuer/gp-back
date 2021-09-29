@@ -157,7 +157,7 @@ class deliveryOrdersController extends Controller
             }
             //if search contain status
             if ($req->has('id_cat_diseno') && !is_null($req->id_cat_diseno)) {
-                $query->orWhere('orden_trabajo.id_cat_diseno', '=', $req->id_cat_diseno);
+                $query->Where('orden_trabajo.id_cat_diseno', '=', $req->id_cat_diseno);
             }
 
             //if search has ink name
