@@ -161,6 +161,8 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('orden-de-entrega/obtener-oe', 'deliveryOrdersController@getDeliveryOrder')->middleware('AccessOE');
     //update delivery order
     Route::post('orden-de-entrega/editar', 'deliveryOrdersController@updateDeliveryOrder');
+    //update status delivery order
+    Route::post('orden-de-entrega/editar-estatus', 'deliveryOrdersController@updateStatusDeliveryOrder');
 
 
     //receptions

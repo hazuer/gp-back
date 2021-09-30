@@ -23,6 +23,7 @@ use App\Http\Controllers\ComunFunctionsController;
 
 use App\Http\Requests\DeliveryOrders\registerOERequest;
 use App\Http\Requests\DeliveryOrders\updateOEResquest;
+use App\Http\Requests\DeliveryOrders\updateStatusDeliveryOrderRequest;
 use App\Http\Requests\DeliveryOrders\checkQrRequest;
 use App\Http\Requests\DeliveryOrders\authorizeDifferenceRequest;
 use App\Http\Requests\DeliveryOrders\receiveOrderRequest;
@@ -419,7 +420,7 @@ class deliveryOrdersController extends Controller
             $newOrder = new orderWork;
             $newOrder->orden_trabajo_of = $req->orden_trabajo_of;
             $newOrder->id_cat_estatus_ot = 1;
-            $newOrder->peso_entrega_total = $total; //sumar y registrar
+            $newOrder->peso_entrega_total = $total;
             $newOrder->id_cat_diseno = $req->id_cat_diseno;
             $newOrder->id_cat_maquina = $req->id_cat_maquina;
             $newOrder->folio_entrega = $folio;
@@ -651,7 +652,7 @@ class deliveryOrdersController extends Controller
                     ], 422);
             }
             //status
-            $updateOrder->id_cat_estatus_ot = 3; //update
+            $updateOrder->id_cat_estatus_ot = 3;
 
             //adittives validation
             if ($collection->contains('aditivo', true)) {
@@ -726,7 +727,38 @@ class deliveryOrdersController extends Controller
         }
     }
 
-
+    //update status delivery order
+    public function updateStatusDeliveryOrder(updateStatusDeliveryOrderRequest $req)
+    {
+        try {
+            //variables
+            $user = auth()->user()->id_usuario;
+            $dateNow = Carbon::now()->format('Y-m-d H:i:s');
+            //update order work
+            $updateStatusOrder = orderWork::find($req->id_orden_trabajo);
+            $updateStatusOrder->id_cat_estatus_ot = $req->id_cat_estatus_ot;
+            //if status is delete
+            if ($req->id_cat_estatus_ot == 3) {
+                $updateStatusOrder->id_usuario_elimina = $user;
+                $updateStatusOrder->fecha_eliminacion = $dateNow;
+            } else {
+                $updateStatusOrder->id_usuario_modifica =  $user;
+                $updateStatusOrder->fecha_modificacion = $dateNow;
+            }
+            $updateStatusOrder->save();
+            //return response 
+            return response()->json([
+                'result' => true,
+                'message' => 'Se actualizo el estatus de la orden de entrega correctamente',
+            ], 200);
+        } catch (\Exception $exception) {
+            //internal server error reponse 
+            return response()->json([
+                'result' => false,
+                'message' => $exception->getMessage()
+            ], 500);
+        }
+    }
 
     //recepciontion
     //resources list orders receptions
